@@ -1,0 +1,6 @@
+com\projects\gerenciamentoprojetos\GerenciamentoProjetosSCMain.class
+entities\Calendario.class
+entities\Cliente.class
+entities\Departamento.class
+entities\Projeto.class
+entities\Funcionario.class
