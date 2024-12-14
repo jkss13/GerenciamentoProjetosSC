@@ -1,6 +1,13 @@
-com\projects\gerenciamentoprojetos\GerenciamentoProjetosSCMain.class
 entities\Calendario.class
-entities\Cliente.class
+entities\Tarefa.class
 entities\Departamento.class
+entities\Fornecedor.class
+entities\Relatorio.class
+entities\Recurso.class
+entities\Feriado.class
+entities\Documento.class
+com\projects\gerenciamentoprojetos\GerenciamentoProjetosSCMain.class
+entities\Cliente.class
+entities\Perfis.class
+entities\Usuario.class
 entities\Projeto.class
-entities\Funcionario.class
