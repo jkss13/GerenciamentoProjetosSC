@@ -26,6 +26,7 @@ import utils.TipoDocumento;
 @Table(name = "TB_DOCUMENTO")
 public class Documento {
     @Id
+    @Column(name = "ID_DOCUMENTO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -41,6 +42,8 @@ public class Documento {
     private String autor;
     @Column(name = "CAMINHO_ARQUIVO_DOCUMENTO", nullable = false, length = 255)
     private String caminhoArquivo;
+    @Column(name = "ID_PROJETO", nullable = false)
+    private Long idProjeto;
 
     public long getId() {
         return id;
@@ -88,6 +91,14 @@ public class Documento {
 
     public void setCaminhoArquivo(String caminhoArquivo) {
         this.caminhoArquivo = caminhoArquivo;
+    }
+
+    public Long getIdProjeto() {
+        return idProjeto;
+    }
+
+    public void setIdProjeto(Long idProjeto) {
+        this.idProjeto = idProjeto;
     }
     
     @Override

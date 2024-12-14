@@ -4,15 +4,20 @@
  */
 package entities;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.util.Date;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  *
@@ -23,19 +28,22 @@ import java.util.Date;
 @Table(name = "TB_PROJETO")
 public class Projeto {
     @Id
+    @Column(name = "ID_PROJETO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
     private String nome;
     @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
     @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_INICIO_PROJETO", nullable = false)
-    private Date dataInicio;
-    @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_FIM_PROJETO", nullable = false)
-    private Date dataFim;
+    @ElementCollection
+    @CollectionTable(name = "TB_DOCUMENTO",
+            joinColumns = @JoinColumn(name = "ID_PROJETO", nullable = false))
+    @Column(name = "DOCUMENTO_PROJETO", nullable = false, length = 255)
+    private Collection<Documento> documentos;
+    @Column(name = "ID_DEPARTAMENTO", nullable = false)
+    private Long idDepartamento;
 
     public long getId() {
         return id;
@@ -61,22 +69,17 @@ public class Projeto {
         this.descricao = descricao;
     }
 
-    public Date getDataInicio() {
-        return dataInicio;
+    public Collection<Documento> getDocumentos() {
+        return documentos;
     }
 
-    public void setDataInicio(Date dataInicio) {
-        this.dataInicio = dataInicio;
+    public void addDocumento(Documento documento) {
+        if(documentos == null) {
+            documentos = new HashSet<>();
+        }
+        documentos.add(documento);
     }
-
-    public Date getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(Date dataFim) {
-        this.dataFim = dataFim;
-    }
-    
+   
     @Override
     public int hashCode() {
         int hash = 0;

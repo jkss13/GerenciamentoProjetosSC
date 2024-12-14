@@ -26,6 +26,7 @@ import utils.TipoFeriado;
 @Table(name = "TB_FERIADO")
 public class Feriado {
     @Id
+    @Column(name = "ID_FERIADO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
