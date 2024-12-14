@@ -4,12 +4,15 @@
  */
 package entities;
 
+import com.sun.istack.NotNull;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.List;
 
 /**
@@ -17,16 +20,27 @@ import java.util.List;
  * @author janei
  */
 @Entity
+@Table (name="TB_CLIENTE")
 public class Cliente {
 
     @Id
+    @Column(name = "ID_CLIENTE")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String nome;
-    private String email;
-    private String cnpj;
-    private String telefone;
+    private Long id;
     
+  
+    @Column(name = "NOME_CLIENTE", length = 70, nullable = false)
+    private String nome;
+    
+    @Column(name = "EMAIL_CLIENTE", length = 50, nullable = false)
+    private String email;
+    
+    @Column(name = "CNPJ_CLIENTE", length = 20, nullable = false)
+    private String cnpj;
+    
+    @Column (name = "TELEFONE_CLIENTE", length = 15, nullable = false)
+    private String telefone;
+     
     //mappedBy = "cliente" -> esse trecho indica que o cliente sera uma chave estrangeira na tabela de projeto
     //cascade = CascadeType.ALL -> indica que toda operação associada ao cliente sera executada as propriedades vinculadas a ele 
     //orphanRemoval = true -> se um projeto for excluido ele nao sera apenas desvinculado do cliente e sim exlcuido do banco

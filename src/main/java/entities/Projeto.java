@@ -4,13 +4,15 @@
  */
 package entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.util.Date;
 
 /**
  *
@@ -18,46 +20,37 @@ import jakarta.persistence.OneToOne;
  */
 
 @Entity
+@Table(name = "TB_PROJETO")
 public class Projeto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
-    private String titulo;
+    @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
+    private String nome;
+    @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
-    private String status;
-    private double orcamento;
-    
-    @OneToOne
-    @JoinColumn(name = "calendario_id", nullable = false)
-    private Calendario calendario;
-    
-    @ManyToOne
-    @JoinColumn(name = "cliente_id") // nome da coluna na tabela projeto que ira armazenar a Chave estrangeira do id do cliente
-    private Cliente cliente;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_INICIO_PROJETO", nullable = false)
+    private Date dataInicio;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_FIM_PROJETO", nullable = false)
+    private Date dataFim;
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
@@ -68,26 +61,43 @@ public class Projeto {
         this.descricao = descricao;
     }
 
-    public String getStatus() {
-        return status;
+    public Date getDataInicio() {
+        return dataInicio;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
-    public double getOrcamento() {
-        return orcamento;
+    public Date getDataFim() {
+        return dataFim;
     }
 
-    public void setOrcamento(double orcamento) {
-        this.orcamento = orcamento;
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
     }
-    public Calendario getCalendario() {
-        return calendario;
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
-    public void setCalendario(Calendario calendario) {
-        this.calendario = calendario;
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Projeto)) {
+            return false;
+        }
+        Projeto other = (Projeto) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
     }
+
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Projeto[ id=" + id + " ]";
+    }
+
 }

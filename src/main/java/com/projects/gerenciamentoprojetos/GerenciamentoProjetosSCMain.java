@@ -1,38 +1,41 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
+
 package com.projects.gerenciamentoprojetos;
 
 import entities.Calendario;
-import entities.Cliente;
 import entities.Departamento;
+import entities.Documento;
+import entities.Feriado;
 import entities.Projeto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author janei
  */
 public class GerenciamentoProjetosSCMain {
+    
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static void main(String[] args) {
-
+        
         Departamento departamento = new Departamento();
         Projeto projeto = new Projeto();
         Calendario calendario = new Calendario();
-        Cliente cliente = new Cliente();
-
+        Documento documento = new Documento();
+        Feriado feriado = new Feriado();
+        
         preencherDepartamento(departamento);
-        preencherProjeto(projeto, calendario, cliente);
-        preeencherCalendario(calendario);
-        preencherCliente(cliente, projeto); //preencherCalendarioRegistroDeHoras(calendarioRegistroDeHoras);
+        preencherProjeto(projeto);
+        preencherDocumento(documento);
+        preencherFeriado(feriado);
+        preencherCalendario(calendario);
 
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -43,67 +46,54 @@ public class GerenciamentoProjetosSCMain {
             em = emf.createEntityManager(); //CriaÃ§Ã£o do EntityManager.
             et = em.getTransaction(); //Recupera objeto responsÃ¡vel pelo gerenciamento de transaÃ§Ã£o.
             et.begin();
-
-            /*em.persist(departamento);;
+            
+            em.persist(departamento);
             em.persist(projeto);
-            em.persist(calendario);*/
-            em.persist(cliente);
-
+            em.persist(calendario);
+            em.persist(documento);
+            em.persist(feriado);
+            
             et.commit();
         } catch (RuntimeException ex) {
-            if (et != null && et.isActive()) {
+            if (et != null && et.isActive())
                 et.rollback();
-            }
         } finally {
-            if (em != null) {
-                em.close();
-            }
-            if (emf != null) {
+            if (em != null)
+                em.close();       
+            if (emf != null)
                 emf.close();
-            }
         }
     }
-
+    
     private static void preencherDepartamento(Departamento departamento) {
         departamento.setNome("TI");
     }
-
-    private static void preencherProjeto(Projeto projeto, Calendario calendario, Cliente cliente) {
-        projeto.setTitulo("PORTAL DE NEGÓCIOS");
+    
+    private static void preencherProjeto(Projeto projeto) {
+        projeto.setNome("PORTAL DE NEGÓCIOS");
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
-        projeto.setStatus("AGUARDANDO APROVAÇÃO");
-        projeto.setOrcamento(85.157);
-        projeto.setCalendario(calendario); // Associar o calendário ao projeto
-        projeto.setCliente(cliente); // Associar o cliente ao projeto
+        projeto.setDataInicio(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
+        projeto.setDataFim(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
     }
-
-    private static void preeencherCalendario(Calendario calendario) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            calendario.setDiaInicio(dateFormat.parse("2024-03-25"));
-            calendario.setDiaFim(dateFormat.parse("2024-11-25"));
-            calendario.setHorasTotais(1280);
-        } catch (ParseException e) {
-            e.printStackTrace(); // Exibe o erro no console
-            throw new RuntimeException("Erro ao analisar as datas", e); // Lança uma exceção em tempo de execução
-        }
+    
+    private static void preencherDocumento(Documento documento) {
+        documento.setTitulo("DOCUMENTO - PORTAL DE NEGÓCIOS");
+        documento.setTipo("REQUISITOS");
+        documento.setDataCriacao(java.sql.Date.valueOf(LocalDate.parse("01/12/2024", dtf)));
+        documento.setAutor("Michael Jackson");
+        documento.setCaminhoArquivo("C:\\Users\\Michael\\Documents");
     }
-
-    private static void preencherCliente(Cliente cliente, Projeto projeto) {
-    cliente.setNome("Microsoft");
-    cliente.setCnpj("154866778");
-    cliente.setEmail("microsoft@outlook.com");
-    cliente.setTelefone("5488997722");
-
-    // Cria uma lista de projetos e associa ao cliente
-    List<Projeto> projetos = new ArrayList<>();
-    projetos.add(projeto);
-    cliente.setProjetos(projetos); // Associar os projetos ao cliente
-}
-
-    /*private static void preencherCalendarioRegistroDeHoras(Calendario calendarioRegistroDeHoras) {
-        calendarioRegistroDeHoras.setDia();
+    
+    private static void preencherFeriado(Feriado feriado) {
+        feriado.setData(java.sql.Date.valueOf(LocalDate.parse("25/12/2024", dtf)));
+        feriado.setNome("Natal");
+        feriado.setTipo("Universal");
+    }
+    
+    private static void preencherCalendario(Calendario calendarioRegistroDeHoras) {
+        calendarioRegistroDeHoras.setDia("01/01/2025");
         calendarioRegistroDeHoras.setHoraInicio("8:00");
         calendarioRegistroDeHoras.setHoraFim("17:00");
-    };*/
+    }
+    
 }
