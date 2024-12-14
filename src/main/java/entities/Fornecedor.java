@@ -23,26 +23,26 @@ import java.util.Date;
 public class Fornecedor{
     
     @Id
-    @Column(name = "ID_Fornecedor")
+    @Column(name = "ID_FORNECEDOR")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "Nome_Fornecedor", nullable = false, length = 255)
+    @Column(name = "NOME_FORCENADOR", nullable = false, length = 255)
     private String nome;
-    @Column(name = "Cnpj_Fornecedor", nullable = false, length = 18)
+    @Column(name = "CNPJ_FORNECEDOR", nullable = false, length = 18)
     private String cnpj;
-    @Column(name = "Email_Fornecedor", nullable = false, length = 255)
+    @Column(name = "EMAIL_FORNECEDOR", nullable = false, length = 255)
     private String email;
     //Criar tabelas para telefone e endereco
     private String telefone;
     private String endereco;
-    @Column(name = "Tipo_Fornecedor", nullable = false, length = 25)
+    @Column(name = "TIPO_FORNECEDOR", nullable = false, length = 25)
     private TipoFornecedor tipoFornecedor;
     @Temporal(TemporalType.DATE)
-    @Column(name = "Data_Cadastro", nullable = true)
+    @Column(name = "DATA_CADASTRO", nullable = true)
     private Date dataCadastro;
-    @Column(name = "Tipo_Status", nullable = false, length = 40)
+    @Column(name = "TIPO_STATUS", nullable = false, length = 40)
     private TipoStatus tipoStatus;
-    @Column(name = "Descricao", nullable = true, length = 255)
+    @Column(name = "DESCRICAO", nullable = true, length = 255)
     private String descricao;
     
     public long getId() {
@@ -123,5 +123,27 @@ public class Fornecedor{
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Fornecedor other = (Fornecedor) obj;
+        return this.id == other.id;
     }
 }

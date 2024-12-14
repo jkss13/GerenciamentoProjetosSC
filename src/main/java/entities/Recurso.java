@@ -13,11 +13,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Objects;
 
 @Entity
-@Table(name = "RECURSO")
+@Table(name = "TB_RECURSO")
 public class Recurso {
     @Id
+        @Column(name = "ID_RECURSO")
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,21 +28,19 @@ public class Recurso {
     @JoinColumn(name = "PROJETO_ID", nullable = false)
     private Projeto projeto;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "NAME_RECURSO" ,nullable = false, length = 255)
     private String nome;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "TIPO_RECURSO",nullable = false, length = 50)
     private String tipo; 
 
-    @Column(nullable = false)
+    @Column(name = "QUANTIDADE_RECURSO" ,nullable = false)
     private Integer quantidade;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "CUSTO_RECURSO" ,nullable = false, precision = 15, scale = 2)
     private Double custo;
 
    
-    public Recurso() {}
-
 
     public Long getId() {
         return id;
@@ -88,4 +89,28 @@ public class Recurso {
     public void setCusto(Double custo) {
         this.custo = custo;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Recurso other = (Recurso) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
+    
 }

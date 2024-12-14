@@ -16,11 +16,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "RELATORIO")
+@Table(name = "TB_RELATORIO")
 public class Relatorio {
     @Id
+        @Column(name = "ID_RELATORIO")
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,25 +31,23 @@ public class Relatorio {
     @JoinColumn(name = "PROJETO_ID", nullable = false)
     private Projeto projeto;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "TITULO_RELATORIO" ,nullable = false, length = 255)
     private String titulo;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_CRIACAO", nullable = false)
+    @Column(name = "DATA_CRIACAO_RELATORIO", nullable = false)
     private Date dataCriacao;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "AUTOR_RELATORIO" ,nullable = false, length = 255)
     private String autor;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "DESCRICAO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "CONTEUDO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
     private String conteudo;
 
    
-    public Relatorio() {}
-
 
     public Long getId() {
         return id;
@@ -102,5 +103,27 @@ public class Relatorio {
 
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Relatorio other = (Relatorio) obj;
+        return Objects.equals(this.id, other.id);
     }
 }

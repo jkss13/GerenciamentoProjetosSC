@@ -16,11 +16,15 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "TAREFA")
+@Table(name = "TB_TAREFA")
 public class Tarefa {
     @Id
+    
+        @Column(name = "ID_TAREFA")
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,29 +32,27 @@ public class Tarefa {
     @JoinColumn(name = "PROJETO_ID", nullable = false)
     private Projeto projeto;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "NOME_TAREFA" ,nullable = false, length = 255)
     private String nome;
 
-    @Column(length = 500)
+    @Column(name = "DESCRICAO_TAREFA" ,length = 500)
     private String descricao;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_INICIO", nullable = false)
+    @Column(name = "DATA_INICIO_TAREFA", nullable = false)
     private Date dataInicio;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_FIM", nullable = true)
+    @Column(name = "DATA_FIM_TAREFA", nullable = true)
     private Date dataFim;
 
-    @Column(length = 50, nullable = false)
+    @Column(name = "PRIORIDADE_TAREFA" ,length = 50, nullable = false)
     private String prioridade; 
 
-    @Column(length = 50, nullable = false)
+    @Column(name = "TIPO_STATUS" ,length = 50, nullable = false)
     private String status; 
 
     
-    public Tarefa() {}
-
   
 
     public Long getId() {
@@ -115,5 +117,27 @@ public class Tarefa {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tarefa other = (Tarefa) obj;
+        return Objects.equals(this.id, other.id);
     }
 }
