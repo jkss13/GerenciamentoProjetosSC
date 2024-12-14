@@ -45,8 +45,6 @@ public class Fornecedor{
     @Column(name = "Descricao", nullable = true, length = 255)
     private String descricao;
     
-    
-    
     public long getId() {
         return id;
     }
