@@ -74,7 +74,6 @@ public class GerenciamentoProjetosSCMain {
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
         projeto.setDataInicio(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
         projeto.setDataFim(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
-        projeto.setOrcamento(85.157);
     }
     
     private static void preencherDocumento(Documento documento) {

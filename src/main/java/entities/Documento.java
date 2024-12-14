@@ -4,11 +4,18 @@
  */
 package entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
+import utils.TipoDocumento;
 
 /**
  *
@@ -16,22 +23,30 @@ import java.util.Date;
  */
 
 @Entity
+@Table(name = "TB_DOCUMENTO")
 public class Documento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
+    @Column(name = "TITULO_DOCUMENTO", nullable = false, length = 255)
     private String titulo;
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TIPO_DOCUMENTO", nullable = false, length = 50)
+    private TipoDocumento tipo;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_CRIACAO_DOCUMENTO", nullable = false)
     private Date dataCriacao;
+    @Column(name = "AUTOR_DOCUMENTO", nullable = false, length = 50)
     private String autor;
+    @Column(name = "CAMINHO_ARQUIVO_DOCUMENTO", nullable = false, length = 255)
     private String caminhoArquivo;
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,11 +58,11 @@ public class Documento {
         this.titulo = titulo;
     }
 
-    public String getTipo() {
+    public TipoDocumento getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoDocumento tipo) {
         this.tipo = tipo;
     }
 
@@ -73,6 +88,29 @@ public class Documento {
 
     public void setCaminhoArquivo(String caminhoArquivo) {
         this.caminhoArquivo = caminhoArquivo;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Documento)) {
+            return false;
+        }
+        Documento other = (Documento) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Documento[ id=" + id + " ]";
     }
     
 }

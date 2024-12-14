@@ -4,10 +4,14 @@
  */
 package entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -16,22 +20,28 @@ import java.util.Date;
  */
 
 @Entity
+@Table(name = "TB_PROJETO")
 public class Projeto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
+    @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
     private String nome;
+    @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_INICIO_PROJETO", nullable = false)
     private Date dataInicio;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DATA_FIM_PROJETO", nullable = false)
     private Date dataFim;
-    private double orcamento;
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,13 +76,28 @@ public class Projeto {
     public void setDataFim(Date dataFim) {
         this.dataFim = dataFim;
     }
-
-    public double getOrcamento() {
-        return orcamento;
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
-    public void setOrcamento(double orcamento) {
-        this.orcamento = orcamento;
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Projeto)) {
+            return false;
+        }
+        Projeto other = (Projeto) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Projeto[ id=" + id + " ]";
     }
 
 }
