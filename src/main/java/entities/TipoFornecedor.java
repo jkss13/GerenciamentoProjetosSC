@@ -6,8 +6,8 @@ package entities;
 
 /**
  *
- * @author janei
+ * @author NOTDXP_017
  */
-public class Perfis {
-    
+public enum TipoFornecedor {
+    SERVICO, PRODUTO, CONSULTORIA;
 }
