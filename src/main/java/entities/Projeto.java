@@ -37,13 +37,23 @@ public class Projeto {
     @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
     @Temporal(TemporalType.DATE)
+    
     @ElementCollection
     @CollectionTable(name = "TB_DOCUMENTO",
             joinColumns = @JoinColumn(name = "ID_PROJETO", nullable = false))
     @Column(name = "DOCUMENTO_PROJETO", nullable = false, length = 255)
     private Collection<Documento> documentos;
+    
     @Column(name = "ID_DEPARTAMENTO", nullable = false)
     private Long idDepartamento;
+
+    public Long getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(Long idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
 
     public long getId() {
         return id;

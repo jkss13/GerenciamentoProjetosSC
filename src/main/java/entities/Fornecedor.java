@@ -4,6 +4,8 @@
  */
 package entities;
 
+import utils.TipoStatus;
+import utils.TipoFornecedor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

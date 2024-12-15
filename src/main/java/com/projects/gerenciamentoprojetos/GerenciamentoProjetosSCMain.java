@@ -4,6 +4,7 @@
 
 package com.projects.gerenciamentoprojetos;
 
+import entities.Documento;
 import entities.Projeto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,6 +13,7 @@ import jakarta.persistence.Persistence;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import static utils.TipoDocumento.TECNICO;
 /**
  *
  * @author janei
@@ -55,21 +57,63 @@ public class GerenciamentoProjetosSCMain {
         }
     }
     
+     private static void persistirDocumento() throws IOException {
+        Documento documento = new Documento();
+        preencherDocumento(documento);
+        EntityManager em = null;
+        EntityTransaction et = null;
+        
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            em.persist(documento);
+            et.commit();
+        } catch (Exception ex) {
+            if (et != null && et.isActive())
+                et.rollback();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
     private static void preencherProjeto(Projeto projeto) throws IOException {
         projeto.setNome("PORTAL DE NEGÓCIOS");
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
         //projeto.setDataInicio(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
         
-        //Cliente cliente = Cliente.getInstance();
-        //Departamento departamento = Departamento.getInstance();
-        //Fornecedor fornecedor = Fornecedor.getInstance();
-        //Recurso recurso = Recurso.getInstance();
-        //Relatorio relatorio = Relatorio.getInstance();
+        Cliente cliente = Cliente.getInstance();
+        Departamento departamento = Departamento.getInstance();
+        Fornecedor fornecedor = Fornecedor.getInstance();
+        Recurso recurso = Recurso.getInstance();
+        Relatorio relatorio = Relatorio.getInstance();
         
         preencherDocumento(projeto);
     }
     
+    private static void preencherDocumento(Documento documento) throws IOException {
+        documento.setTitulo("DOCUMENTO REQUISITOS");
+        documento.setTipo(TECNICO);
+        documento.setDataCriacao(java.sql.Date.valueOf(LocalDate.parse("01/12/2024", dtf)));
+        documento.setAutor("Fulano");
+        documento.setCaminhoArquivo("caminho");
+    }
+    
     private static void consultarProjeto(long 1) {
+        EntityManager em = emf.createEntityManager();
+        
+        Projeto projeto = em.find(Projeto.class, 1);
+        
+        System.out.println(projeto.getNome());
+        System.out.println(projeto.getDescricao());
+        System.out.println(projeto.getDocumentos().iterator().next());
+        
+        em.close();
+    }    
+    
+    private static void consultarDocumento(long 1) {
         EntityManager em = emf.createEntityManager();
         
         Projeto projeto = em.find(Projeto.class, 1);
