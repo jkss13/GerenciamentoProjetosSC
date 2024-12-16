@@ -17,6 +17,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.Objects;
+import utils.TipoStatus;
 
 @Entity
 @Table(name = "TB_TAREFA")
@@ -30,7 +31,7 @@ public class Tarefa {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROJETO_ID", nullable = false)
+    @JoinColumn(name = "ID_PROJETO", nullable = false)
     private Projeto projeto;
 
     @Column(name = "NOME_TAREFA", nullable = false, length = 255)
@@ -50,12 +51,22 @@ public class Tarefa {
     @Column(name = "PRIORIDADE_TAREFA", length = 50, nullable = false)
     private String prioridade;
 
+ 
+
     @Column(name = "TIPO_STATUS", length = 50, nullable = false)
-    private String status;
+    private TipoStatus tipoStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USUARIO_ID", nullable = false)
     private Usuario usuarioResponsavel;
+    
+       public TipoStatus getTipoStatus() {
+        return tipoStatus;
+    }
+
+    public void setTipoStatus(TipoStatus tipoStatus) {
+        this.tipoStatus = tipoStatus;
+    }
 
     public Usuario getUsuarioResponsavel() {
         return usuarioResponsavel;
@@ -121,33 +132,28 @@ public class Tarefa {
         this.prioridade = prioridade;
     }
 
-    public String getStatus() {
-        return status;
-    }
+ 
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
+       @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Tarefa)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Tarefa other = (Tarefa) obj;
-        return Objects.equals(this.id, other.id);
+        Tarefa other = (Tarefa) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Tarefa[ id=" + id + " ]";
     }
 }
