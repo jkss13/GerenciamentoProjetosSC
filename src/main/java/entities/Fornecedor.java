@@ -4,9 +4,11 @@
  */
 package entities;
 
+import jakarta.persistence.CollectionTable;
 import utils.TipoStatus;
 import utils.TipoFornecedor;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,7 +40,7 @@ public class Fornecedor implements Serializable {
     @Id
     @Column(name = "ID_FORNECEDOR")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
     @Column(name = "NOME_FORNECEDOR", nullable = false, length = 255)
     private String nome;
@@ -48,12 +50,19 @@ public class Fornecedor implements Serializable {
     
     @Column(name = "EMAIL_FORNECEDOR", nullable = false, length = 255)
     private String email;
+
+    @ElementCollection(fetch = FetchType.LAZY) 
+    @CollectionTable(name = "TB_TELEFONE_USUARIO",
+            joinColumns = @JoinColumn(name = "ID_USUARIO", nullable = false))
+    @Column(name = "NUM_TELEFONE", nullable = false, length = 20)
+    private Collection<String> telefones;
     
-    //Criar tabelas para telefone e endereco
-    private String telefone;
-    
-    private String endereco;
-    
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "TB_TELEFONE_USUARIO",            
+            joinColumns = @JoinColumn(name = "ID_USUARIO", nullable = false))
+    @Column(name = "ENDERECO", nullable = false, length = 255)
+    private Collection<String> enderecos;
+ 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_FORNECEDOR", nullable = false, length = 25)
     private TipoFornecedor tipoFornecedor;
@@ -71,6 +80,29 @@ public class Fornecedor implements Serializable {
     
     @ManyToMany(mappedBy = "fornecedores", fetch = FetchType.LAZY)
     private List<Projeto> projetos;
+    
+    
+    public Collection<String> getTelefones() {
+        return telefones;
+    }
+
+    public void addTelefone(String telefone) {
+        if (telefones == null) {
+            telefones = new HashSet<>();
+        }
+        telefones.add(telefone);
+    }
+
+    public Collection<String> getEnderecos() {
+        return enderecos;
+    }
+    
+    public void addEndereco(String endereco) {
+        if (enderecos == null) {
+            enderecos = new HashSet<>();
+        }
+        enderecos.add(endereco);
+    }
     
     public long getId() {
         return id;
@@ -102,22 +134,6 @@ public class Fornecedor implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
     }
 
     public TipoFornecedor getTipoFornecedor() {
@@ -187,24 +203,20 @@ public class Fornecedor implements Serializable {
     
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Fornecedor)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Fornecedor other = (Fornecedor) obj;
-        return this.id == other.id;
+        Fornecedor other = (Fornecedor) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
     }
   
     @Override

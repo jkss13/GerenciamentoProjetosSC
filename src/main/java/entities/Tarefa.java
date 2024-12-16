@@ -21,9 +21,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "TB_TAREFA")
 public class Tarefa {
+
     @Id
-    
-        @Column(name = "ID_TAREFA")
+
+    @Column(name = "ID_TAREFA")
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,10 +33,10 @@ public class Tarefa {
     @JoinColumn(name = "PROJETO_ID", nullable = false)
     private Projeto projeto;
 
-    @Column(name = "NOME_TAREFA" ,nullable = false, length = 255)
+    @Column(name = "NOME_TAREFA", nullable = false, length = 255)
     private String nome;
 
-    @Column(name = "DESCRICAO_TAREFA" ,length = 500)
+    @Column(name = "DESCRICAO_TAREFA", length = 500)
     private String descricao;
 
     @Temporal(TemporalType.DATE)
@@ -46,14 +47,23 @@ public class Tarefa {
     @Column(name = "DATA_FIM_TAREFA", nullable = true)
     private Date dataFim;
 
-    @Column(name = "PRIORIDADE_TAREFA" ,length = 50, nullable = false)
-    private String prioridade; 
+    @Column(name = "PRIORIDADE_TAREFA", length = 50, nullable = false)
+    private String prioridade;
 
-    @Column(name = "TIPO_STATUS" ,length = 50, nullable = false)
-    private String status; 
+    @Column(name = "TIPO_STATUS", length = 50, nullable = false)
+    private String status;
 
-    
-  
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "USUARIO_ID", nullable = false)
+    private Usuario usuarioResponsavel;
+
+    public Usuario getUsuarioResponsavel() {
+        return usuarioResponsavel;
+    }
+
+    public void setUsuarioResponsavel(Usuario usuarioResponsavel) {
+        this.usuarioResponsavel = usuarioResponsavel;
+    }
 
     public Long getId() {
         return id;
