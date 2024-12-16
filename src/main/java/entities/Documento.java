@@ -8,9 +8,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -32,18 +35,24 @@ public class Documento {
     
     @Column(name = "TITULO_DOCUMENTO", nullable = false, length = 255)
     private String titulo;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_DOCUMENTO", nullable = false, length = 50)
     private TipoDocumento tipo;
+    
     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_CRIACAO_DOCUMENTO", nullable = false)
     private Date dataCriacao;
+    
     @Column(name = "AUTOR_DOCUMENTO", nullable = false, length = 50)
     private String autor;
+    
     @Column(name = "CAMINHO_ARQUIVO_DOCUMENTO", nullable = false, length = 255)
     private String caminhoArquivo;
-    @Column(name = "ID_PROJETO", nullable = false)
-    private Long idProjeto;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_PROJETO", nullable = false)
+    private Projeto projeto;
 
     public long getId() {
         return id;
@@ -93,14 +102,14 @@ public class Documento {
         this.caminhoArquivo = caminhoArquivo;
     }
 
-    public Long getIdProjeto() {
-        return idProjeto;
+    public Projeto getProjeto() {
+        return projeto;
     }
 
-    public void setIdProjeto(Long idProjeto) {
-        this.idProjeto = idProjeto;
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

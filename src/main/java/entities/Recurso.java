@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
@@ -19,16 +20,11 @@ import java.util.Objects;
 @Table(name = "TB_RECURSO")
 public class Recurso {
     @Id
-        @Column(name = "ID_RECURSO")
-
+    @Column(name = "ID_RECURSO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROJETO_ID", nullable = false)
-    private Projeto projeto;
-
-    @Column(name = "NAME_RECURSO" ,nullable = false, length = 255)
+    @Column(name = "NOME_RECURSO" ,nullable = false, length = 255)
     private String nome;
 
     @Column(name = "TIPO_RECURSO",nullable = false, length = 50)
@@ -39,8 +35,10 @@ public class Recurso {
 
     @Column(name = "CUSTO_RECURSO" ,nullable = false, precision = 15, scale = 2)
     private Double custo;
-
-   
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_PROJETO", nullable = false)
+    private Projeto projeto;
 
     public Long getId() {
         return id;
@@ -48,14 +46,6 @@ public class Recurso {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Projeto getProjeto() {
-        return projeto;
-    }
-
-    public void setProjeto(Projeto projeto) {
-        this.projeto = projeto;
     }
 
     public String getNome() {
@@ -90,6 +80,22 @@ public class Recurso {
         this.custo = custo;
     }
 
+    public Projeto getProjeto() {
+        return projeto;
+    }
+
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
+    }
+    
+    // Método de utilidade para adicionar o recurso a um projeto, se necessário.
+    public void associarProjeto(Projeto projeto) {
+        this.projeto = projeto;
+        if (!projeto.getRecursos().contains(this)) {
+            projeto.addRecurso(this);  // Presumindo que o método addRecurso exista no Projeto
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -112,5 +118,8 @@ public class Recurso {
         return Objects.equals(this.id, other.id);
     }
     
-    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Recurso[ id=" + id + " ]";
+    }
 }

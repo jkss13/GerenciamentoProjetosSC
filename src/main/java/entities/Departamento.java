@@ -8,6 +8,7 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,8 +17,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  *
@@ -25,7 +28,7 @@ import java.util.HashSet;
  */
 @Entity
 @Table (name = "TB_DEPARTAMENTO")
-public class Departamento implements Serializable{
+public class Departamento implements Serializable {
     @Id
     @Column(name="ID_DEPARTAMENTO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +37,13 @@ public class Departamento implements Serializable{
     @Column(name="NOME_DEPARTAMENTO", length = 50, nullable = false)
     private String nome;
    
-    @ManyToMany
-    @JoinTable( //gerando tabela intermediaria
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
         name = "TB_DEPARTAMENTO_PROJETO", // Nome da tabela intermediária
-        joinColumns = @JoinColumn(name = "ID_DEPARTAMENTO"), // Chave estrangeira para Departamento
-        inverseJoinColumns = @JoinColumn(name = "ID_PROJETO") // Chave estrangeira para Projeto
+        joinColumns = @JoinColumn(name = "ID_DEPARTAMENTO"), 
+        inverseJoinColumns = @JoinColumn(name = "ID_PROJETO") 
     )
-    private Collection<Projeto> projetos = new HashSet<>();
+    private List<Projeto> projetos;
     
     public Long getId() {
         return id;
@@ -57,23 +60,38 @@ public class Departamento implements Serializable{
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-   public Collection<Projeto> getProjetos() {
+
+    public List<Projeto> getProjetos() {
         return projetos;
     }
 
-    public void setProjetos(Collection<Projeto> projetos) {
+    public void setProjetos(List<Projeto> projetos) {
         this.projetos = projetos;
+        // Adiciona o Departamento a cada Projeto na lista de departamentos
+        for (Projeto projeto : projetos) {
+            if (!projeto.getDepartamentos().contains(this)) {
+                projeto.getDepartamentos().add(this); // Adiciona o Departamento na lista de departamentos do Projeto
+            }
+        }
     }
 
+    // Método auxiliar para adicionar um Projeto individualmente
     public void addProjeto(Projeto projeto) {
-        this.projetos.add(projeto);
-        projeto.getDepartamentos().add(this);  // erro pois precisa ter o getter de departamento em projeto
+        if (this.projetos == null) {
+            this.projetos = new ArrayList<>();
+        }
+        if (!this.projetos.contains(projeto)) {
+            this.projetos.add(projeto);
+            projeto.getDepartamentos().add(this); // Adiciona o Departamento à lista de departamentos do Projeto
+        }
     }
 
+    // Método auxiliar para remover um Projeto individualmente
     public void removeProjeto(Projeto projeto) {
-        this.projetos.remove(projeto);
-        projeto.getDepartamentos().remove(this); 
+        if (this.projetos != null && this.projetos.contains(projeto)) {
+            this.projetos.remove(projeto);
+            projeto.getDepartamentos().remove(this); // Remove o Departamento da lista de departamentos do Projeto
+        }
     }
     
     @Override
@@ -92,5 +110,10 @@ public class Departamento implements Serializable{
         
         return !((this.id == null && other.id != null) || 
                 (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Departamento[ id=" + id + " ]";
     }
 }

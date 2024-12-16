@@ -7,6 +7,7 @@ package entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,10 +42,9 @@ public class Calendario implements Serializable{
     @Column (name = "HORAS_TOTAIS", nullable = false)
     private int horasTotais;
 
-    @OneToOne(mappedBy = "calendario", optional = false)
+    @OneToOne(mappedBy = "calendario", optional = false, fetch = FetchType.LAZY)
     private Projeto projeto;
 
-    
     public int getHorasTotais() {
         return horasTotais;
     }
@@ -53,8 +53,6 @@ public class Calendario implements Serializable{
         this.horasTotais = horasTotais;
     }
 
-   
-
     public Projeto getProjeto() {
         return projeto;
     }
@@ -62,7 +60,7 @@ public class Calendario implements Serializable{
     // Setter de Projeto com sincronização bidirecional
     public void setProjeto(Projeto projeto) {
         if (this.projeto != null) {
-            this.projeto.setCalendario(null); // esta dando erro pois precisa adicionar o setter de calendario em Projeto
+            this.projeto.setCalendario(null); 
         }
 
         this.projeto = projeto;
@@ -112,6 +110,11 @@ public class Calendario implements Serializable{
         
         return !((this.id == null && other.id != null) || 
                 (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Calendario[ id=" + id + " ]";
     }
 
 }

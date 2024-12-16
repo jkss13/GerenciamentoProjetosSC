@@ -5,6 +5,7 @@
 package com.projects.gerenciamentoprojetos;
 
 import entities.Documento;
+import entities.Feriado;
 import entities.Projeto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -13,11 +14,13 @@ import jakarta.persistence.Persistence;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import static utils.TipoDocumento.TECNICO;
+import utils.TipoDocumento;
+import utils.TipoFeriado;
 /**
  *
  * @author janei
  */
+
 public class GerenciamentoProjetosSCMain {
     
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -57,7 +60,29 @@ public class GerenciamentoProjetosSCMain {
         }
     }
     
-     private static void persistirDocumento() throws IOException {
+    private static void persistirDocumento() throws IOException {
+        Documento documento = new Documento();
+        preencherDocumento(documento);
+        EntityManager em = null;
+        EntityTransaction et = null;
+        
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            em.persist(documento);
+            et.commit();
+        } catch (Exception ex) {
+            if (et != null && et.isActive())
+                et.rollback();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+     
+    private static void persistirFeriado() throws IOException {
         Documento documento = new Documento();
         preencherDocumento(documento);
         EntityManager em = null;
@@ -91,14 +116,22 @@ public class GerenciamentoProjetosSCMain {
         Relatorio relatorio = Relatorio.getInstance();
         
         preencherDocumento(projeto);
+        preencherFeriado(projeto);
     }
+    
     
     private static void preencherDocumento(Documento documento) throws IOException {
         documento.setTitulo("DOCUMENTO REQUISITOS");
-        documento.setTipo(TECNICO);
+        documento.setTipo(TipoDocumento.TECNICO);
         documento.setDataCriacao(java.sql.Date.valueOf(LocalDate.parse("01/12/2024", dtf)));
         documento.setAutor("Fulano");
         documento.setCaminhoArquivo("caminho");
+    }
+    
+    private static void preencherFeriado(Feriado feriado) throws IOException {
+        feriado.setData(java.sql.Date.valueOf(LocalDate.parse("25/12/2024", dtf)));
+        feriado.setNome("Natal");
+        feriado.setTipo(TipoFeriado.UNIVERSAL);
     }
     
     private static void consultarProjeto(long 1) {
@@ -116,12 +149,26 @@ public class GerenciamentoProjetosSCMain {
     private static void consultarDocumento(long 1) {
         EntityManager em = emf.createEntityManager();
         
-        Projeto projeto = em.find(Projeto.class, 1);
+        Documento documento = em.find(Documento.class, 1);
         
-        System.out.println(projeto.getNome());
-        System.out.println(projeto.getDescricao());
-        System.out.println(projeto.getDocumentos().iterator().next());
+        System.out.println(documento.getTitulo());
+        System.out.println(documento.getTipo());
+        System.out.println(documento.getDataCriacao());
+        System.out.println(documento.getAutor());
+        System.out.println(documento.getCaminhoArquivo());
         
         em.close();
     }    
+    
+    private static void consultarFeriado(long 1) {
+        EntityManager em = emf.createEntityManager();
+        
+        Feriado feriado = em.find(Feriado.class, 1);
+        
+        System.out.println(feriado.getData());
+        System.out.println(feriado.getNome());
+        System.out.println(feriado.getTipo());
+        
+        em.close();
+    } 
 }

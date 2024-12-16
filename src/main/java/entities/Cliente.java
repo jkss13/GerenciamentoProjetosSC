@@ -4,6 +4,7 @@
  */
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -13,10 +14,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Table (name="TB_CLIENTE")
@@ -43,6 +47,8 @@ public class Cliente implements Serializable{
     @Column(name = "NUM_TELEFONE", nullable = false, length = 20)
     private Collection<String> telefones;
 
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Projeto> projetos;
 
     public void setTelefones(Collection<String> telefones) {
         this.telefones = telefones;
@@ -91,7 +97,39 @@ public class Cliente implements Serializable{
         telefones.add(telefone);
     }
 
-    
+    public List<Projeto> getProjetos() {
+        return projetos;
+    }
+
+    public void setProjetos(List<Projeto> projetos) {
+        this.projetos = projetos;
+        // Adiciona o Cliente a cada Projeto na lista de cliente
+        for (Projeto projeto : projetos) {
+            if (projeto.getCliente() != this) {
+                projeto.setCliente(this);  // Define o Cliente no Projeto
+            }
+        }
+    }
+
+    // Método auxiliar para adicionar um Projeto individualmente
+    public void addProjeto(Projeto projeto) {
+        if (projetos == null) {
+            projetos = new ArrayList<>();
+        }
+        if (!projetos.contains(projeto)) {
+            projetos.add(projeto);
+            projeto.setCliente(this);  // Define o Cliente no Projeto
+        }
+    }
+
+    // Método auxiliar para remover um Projeto individualmente
+    public void removeProjeto(Projeto projeto) {
+        if (projetos != null && projetos.contains(projeto)) {
+            projetos.remove(projeto);
+            projeto.setCliente(null);  // Remove o Cliente do Projeto
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,5 +146,10 @@ public class Cliente implements Serializable{
         
         return !((this.id == null && other.id != null) || 
                 (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Cliente[ id=" + id + " ]";
     }
 }

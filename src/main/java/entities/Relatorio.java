@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -22,14 +23,9 @@ import java.util.Objects;
 @Table(name = "TB_RELATORIO")
 public class Relatorio {
     @Id
-        @Column(name = "ID_RELATORIO")
-
+    @Column(name = "ID_RELATORIO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROJETO_ID", nullable = false)
-    private Projeto projeto;
 
     @Column(name = "TITULO_RELATORIO" ,nullable = false, length = 255)
     private String titulo;
@@ -47,7 +43,8 @@ public class Relatorio {
     @Column(name = "CONTEUDO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
     private String conteudo;
 
-   
+    @OneToOne(mappedBy = "relatorio", optional = false, fetch = FetchType.LAZY)
+    private Projeto projeto;
 
     public Long getId() {
         return id;
@@ -62,7 +59,16 @@ public class Relatorio {
     }
 
     public void setProjeto(Projeto projeto) {
+        // Sincronização bidirecional
+        if (this.projeto != null) {
+            this.projeto.setRelatorio(null);  // Desassocia o projeto anterior
+        }
+
         this.projeto = projeto;
+
+        if (projeto != null) {
+            projeto.setRelatorio(this);  // Estabelece o vínculo bidirecional
+        }
     }
 
     public String getTitulo() {
@@ -125,5 +131,10 @@ public class Relatorio {
         }
         final Relatorio other = (Relatorio) obj;
         return Objects.equals(this.id, other.id);
+    }
+    
+    @Override
+    public String toString() {
+        return "exemplo.jpa.Relatorio[ id=" + id + " ]";
     }
 }
