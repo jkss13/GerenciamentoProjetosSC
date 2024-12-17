@@ -1,7 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.projects.gerenciamentoprojetos;
 
 import entities.Calendario;
@@ -24,18 +23,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import utils.TipoDocumento;
 import utils.TipoFeriado;
+
 /**
  *
  * @author janei
  */
 
 public class GerenciamentoProjetosSCMain {
-    
+
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
+
     private static final EntityManagerFactory emf
             = Persistence.createEntityManagerFactory("carga_trabalho");
-    
+
     public static void main(String[] args) throws IOException {
         persistirProjeto();
         persistirDocumento();
@@ -60,10 +60,15 @@ public class GerenciamentoProjetosSCMain {
         consultarDepartamento(1L);
     }
 
-    
     private static void persistirProjeto() throws IOException {
         Projeto projeto = new Projeto();
-        preencherProjeto(projeto);
+        preencherProjeto(projeto);  // Preenche o projeto com dados (incluindo o calendário)
+
+        // Antes de persistir o projeto, associamos um calendário a ele
+        Calendario calendario = new Calendario();
+        preencherCalendario(calendario, projeto);  // Preenche os dados do calendário e associa ao projeto
+        projeto.setCalendario(calendario);         // Associando o calendário ao projeto
+
         EntityManager em = null;
         EntityTransaction et = null;
 
@@ -71,8 +76,31 @@ public class GerenciamentoProjetosSCMain {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
-            em.persist(projeto);
-            persistirCalendario(projeto); // Chama a função para persistir o calendário do projeto
+            em.persist(projeto); // Persistir o projeto, o calendário será persistido automaticamente pelo JPA
+            et.commit();  // Commit da transação
+        } catch (Exception ex) {
+            if (et != null && et.isActive()) {
+                et.rollback();  // Desfaz a transação em caso de erro
+            }
+            System.err.println("Erro ao persistir projeto: " + ex.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();  // Fecha o EntityManager
+            }
+        }
+    }
+
+    private static void persistirDocumento() throws IOException {
+        Documento documento = new Documento();
+        preencherDocumento(documento);
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            em.persist(documento);
             et.commit();
         } catch (Exception ex) {
             if (et != null && et.isActive()) {
@@ -84,35 +112,13 @@ public class GerenciamentoProjetosSCMain {
             }
         }
     }
-    
-    private static void persistirDocumento() throws IOException {
-        Documento documento = new Documento();
-        preencherDocumento(documento);
-        EntityManager em = null;
-        EntityTransaction et = null;
-        
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.persist(documento);
-            et.commit();
-        } catch (Exception ex) {
-            if (et != null && et.isActive())
-                et.rollback();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-     
+
     private static void persistirFeriado() throws IOException {
         Documento documento = new Documento();
         preencherDocumento(documento);
         EntityManager em = null;
         EntityTransaction et = null;
-        
+
         try {
             em = emf.createEntityManager();
             et = em.getTransaction();
@@ -120,15 +126,16 @@ public class GerenciamentoProjetosSCMain {
             em.persist(documento);
             et.commit();
         } catch (Exception ex) {
-            if (et != null && et.isActive())
+            if (et != null && et.isActive()) {
                 et.rollback();
+            }
         } finally {
             if (em != null) {
                 em.close();
             }
         }
     }
-    
+
     private static void persistirCalendario(Projeto projeto) throws IOException {
         Calendario calendario = new Calendario();
         preencherCalendario(calendario, projeto);  // Preenche o calendário com os dados e o associa ao projeto
@@ -209,22 +216,21 @@ public class GerenciamentoProjetosSCMain {
         }
     }
 
-    
     private static void preencherProjeto(Projeto projeto) throws IOException {
         projeto.setNome("PORTAL DE NEGÓCIOS");
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
         //projeto.setDataInicio(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
-        
+
         Cliente cliente = Cliente.getInstance();
         Departamento departamento = Departamento.getInstance();
         Fornecedor fornecedor = Fornecedor.getInstance();
         Recurso recurso = Recurso.getInstance();
         Relatorio relatorio = Relatorio.getInstance();
-        
+
         preencherDocumento(projeto);
         preencherFeriado(projeto);
     }
-    
+
     //METODO DE PREENCHER O PROJETO
     /*private static void preencherProjeto(Projeto projeto) throws IOException {
     // Preenchendo as propriedades do projeto
@@ -260,8 +266,6 @@ public class GerenciamentoProjetosSCMain {
     preencherDocumento(projeto);
     preencherFeriado(projeto);
 }*/
-
-    
     private static void preencherDocumento(Documento documento) throws IOException {
         documento.setTitulo("DOCUMENTO REQUISITOS");
         documento.setTipo(TipoDocumento.TECNICO);
@@ -269,13 +273,13 @@ public class GerenciamentoProjetosSCMain {
         documento.setAutor("Fulano");
         documento.setCaminhoArquivo("caminho");
     }
-    
+
     private static void preencherFeriado(Feriado feriado) throws IOException {
         feriado.setData(java.sql.Date.valueOf(LocalDate.parse("25/12/2024", dtf)));
         feriado.setNome("Natal");
         feriado.setTipo(TipoFeriado.UNIVERSAL);
     }
-    
+
     private static void preencherCalendario(Calendario calendario, Projeto projeto) throws IOException {
         // Definir as datas de início e fim, bem como as horas totais do projeto
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -327,45 +331,47 @@ public class GerenciamentoProjetosSCMain {
         departamento.addProjeto(projeto2);  // Associa o projeto2 ao departamento
     }
 
-    
-    private static void consultarProjeto(long 1) {
+    private static void consultarProjeto(long  
+        1) {
         EntityManager em = emf.createEntityManager();
-        
+
         Projeto projeto = em.find(Projeto.class, 1);
-        
+
         System.out.println(projeto.getNome());
         System.out.println(projeto.getDescricao());
         System.out.println(projeto.getDocumentos().iterator().next());
-        
+
         em.close();
-    }    
-    
-    private static void consultarDocumento(long 1) {
+    }
+
+    private static void consultarDocumento(long  
+        1) {
         EntityManager em = emf.createEntityManager();
-        
+
         Documento documento = em.find(Documento.class, 1);
-        
+
         System.out.println(documento.getTitulo());
         System.out.println(documento.getTipo());
         System.out.println(documento.getDataCriacao());
         System.out.println(documento.getAutor());
         System.out.println(documento.getCaminhoArquivo());
-        
+
         em.close();
-    }    
-    
-    private static void consultarFeriado(long 1) {
+    }
+
+    private static void consultarFeriado(long  
+        1) {
         EntityManager em = emf.createEntityManager();
-        
+
         Feriado feriado = em.find(Feriado.class, 1);
-        
+
         System.out.println(feriado.getData());
         System.out.println(feriado.getNome());
         System.out.println(feriado.getTipo());
-        
+
         em.close();
-    } 
-    
+    }
+
     private static void consultarCalendario(long projetoId) {
         EntityManager em = emf.createEntityManager();
 
