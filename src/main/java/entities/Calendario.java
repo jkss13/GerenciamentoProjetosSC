@@ -42,7 +42,7 @@ public class Calendario implements Serializable{
     @Column (name = "HORAS_TOTAIS", nullable = false)
     private int horasTotais;
 
-    @OneToOne(mappedBy = "calendario", optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "calendario", optional = false)
     private Projeto projeto;
 
     public int getHorasTotais() {
