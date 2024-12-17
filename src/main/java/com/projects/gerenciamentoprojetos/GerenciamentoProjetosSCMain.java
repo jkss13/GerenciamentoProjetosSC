@@ -12,6 +12,7 @@ import entities.Fornecedor;
 import entities.Projeto;
 import entities.Recurso;
 import entities.Relatorio;
+import entities.Tarefa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -66,6 +67,7 @@ public class GerenciamentoProjetosSCMain {
 
         // Antes de persistir o projeto, associamos um calendário a ele
         Calendario calendario = new Calendario();
+        // 
         preencherCalendario(calendario, projeto);  // Preenche os dados do calendário e associa ao projeto
         projeto.setCalendario(calendario);         // Associando o calendário ao projeto
 
@@ -181,12 +183,12 @@ public class GerenciamentoProjetosSCMain {
             et.commit();
         } catch (Exception ex) {
             if (et != null && et.isActive()) {
-                et.rollback();  // Desfaz a transação em caso de erro
+                et.rollback();  
             }
             ex.printStackTrace();
         } finally {
             if (em != null) {
-                em.close();  // Fecha o EntityManager
+                em.close(); 
             }
         }
     }
@@ -215,6 +217,81 @@ public class GerenciamentoProjetosSCMain {
             }
         }
     }
+    
+    private static void persistirRecurso() throws IOException {
+    Recurso recurso = new Recurso();
+    preencherRecurso(recurso); // preenche os dados do Recurso
+
+    EntityManager em = null;
+    EntityTransaction et = null;
+
+    try {
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+        et.begin();
+        em.persist(recurso); 
+        et.commit();
+    }  catch (Exception ex) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            System.err.println("Erro ao persistir Recurso: " + ex.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+}
+
+    private static void persistirTarefa() throws IOException {
+    Tarefa tarefa = new Tarefa();
+    preencherTarefa(tarefa); // Preenche os dados da Tarefa
+
+    EntityManager em = null;
+    EntityTransaction et = null;
+
+    try {
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+        et.begin();
+        em.persist(tarefa); 
+        et.commit();
+    } catch (Exception ex) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            System.err.println("Erro ao persistir Tarefa: " + ex.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+}
+
+    private static void persistirRelatorio() throws IOException {
+    Relatorio relatorio = new Relatorio();
+    preencherRelatorio(relatorio); // Preenche os dados do Relatório
+
+    EntityManager em = null;
+    EntityTransaction et = null;
+
+    try {
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+        et.begin();
+        em.persist(relatorio); 
+        et.commit();
+    } catch (Exception ex) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            System.err.println("Erro ao persistir Relatorio: " + ex.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+}
 
     private static void preencherProjeto(Projeto projeto) throws IOException {
         projeto.setNome("PORTAL DE NEGÓCIOS");
@@ -435,5 +512,17 @@ public class GerenciamentoProjetosSCMain {
         }
 
         em.close();
+    }
+
+    private static void preencherRecurso(Recurso recurso) {
+      //  throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private static void preencherTarefa(Tarefa tarefa) {
+       // throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private static void preencherRelatorio(Relatorio relatorio) {
+       // throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
