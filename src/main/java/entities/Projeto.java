@@ -7,6 +7,7 @@ package entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +20,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -34,6 +36,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "TB_PROJETO")
+@DiscriminatorValue(value = "P")
+//@PrimaryKeyJoinColumn(name = "", referencedColumnName = "")
 public class Projeto implements Serializable {
     @Id
     @Column(name = "ID_PROJETO")

@@ -4,9 +4,15 @@
 
 package com.projects.gerenciamentoprojetos;
 
+import entities.Calendario;
+import entities.Cliente;
+import entities.Departamento;
 import entities.Documento;
 import entities.Feriado;
+import entities.Fornecedor;
 import entities.Projeto;
+import entities.Recurso;
+import entities.Relatorio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -14,6 +20,8 @@ import jakarta.persistence.Persistence;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import utils.TipoDocumento;
 import utils.TipoFeriado;
 /**
@@ -35,7 +43,6 @@ public class GerenciamentoProjetosSCMain {
         
         consultarProjeto(1L);
         consultarDocumento(1L);
-        consultarFeriado(1L);
     }
     
     private static void persistirProjeto() throws IOException {
@@ -109,14 +116,40 @@ public class GerenciamentoProjetosSCMain {
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
         //projeto.setDataInicio(java.sql.Date.valueOf(LocalDate.parse("01/01/2025", dtf)));
         
-        Cliente cliente = Cliente.getInstance();
-        Departamento departamento = Departamento.getInstance();
-        Fornecedor fornecedor = Fornecedor.getInstance();
-        Recurso recurso = Recurso.getInstance();
-        Relatorio relatorio = Relatorio.getInstance();
+        // Instanciando objetos de outros componentes associados ao projeto
+        Cliente cliente = new Cliente();
+        cliente.setNome("Cliente XYZ");
+        projeto.setCliente(cliente);
         
-        preencherDocumento(projeto);
-        preencherFeriado(projeto);
+        Departamento departamento1 = new Departamento();
+        departamento1.setNome("Departamento A");
+        Departamento departamento2 = new Departamento();
+        departamento2.setNome("Departamento B");
+        List<Departamento> departamentos = new ArrayList<>();
+        departamentos.add(departamento1);
+        departamentos.add(departamento2);
+        projeto.setDepartamentos(departamentos);
+
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setNome("Fornecedor ABC");
+        List<Fornecedor> fornecedores = new ArrayList<>();
+        fornecedores.add(fornecedor);
+        projeto.setFornecedores(fornecedores);
+
+        Recurso recurso = new Recurso();
+        recurso.setNome("Recurso 01");
+        List<Recurso> recursos = new ArrayList<>();
+        recursos.add(recurso);
+        projeto.setRecursos(recursos);
+        
+        Calendario calendario = new Calendario();
+        projeto.setCalendario(calendario);
+        
+        Relatorio relatorio = new Relatorio();
+        projeto.setRelatorio(relatorio);
+        
+        //preencherDocumento(projeto);
+        //preencherFeriado(projeto);
     }
     
     
@@ -134,41 +167,36 @@ public class GerenciamentoProjetosSCMain {
         feriado.setTipo(TipoFeriado.UNIVERSAL);
     }
     
-    private static void consultarProjeto(long 1) {
+    private static void consultarProjeto(long id) {
         EntityManager em = emf.createEntityManager();
-        
-        Projeto projeto = em.find(Projeto.class, 1);
-        
-        System.out.println(projeto.getNome());
-        System.out.println(projeto.getDescricao());
-        System.out.println(projeto.getDocumentos().iterator().next());
-        
+
+        Projeto projeto = em.find(Projeto.class, id);
+
+        if (projeto != null) {
+            System.out.println(projeto.getNome());
+            System.out.println(projeto.getDescricao());
+            // Supondo que documentos estejam associados corretamente
+            if (!projeto.getDocumentos().isEmpty()) {
+                System.out.println(projeto.getDocumentos().iterator().next().getTitulo());
+            }
+        }
+
         em.close();
-    }    
+    }  
     
-    private static void consultarDocumento(long 1) {
+    private static void consultarDocumento(long id) {
         EntityManager em = emf.createEntityManager();
-        
-        Documento documento = em.find(Documento.class, 1);
-        
-        System.out.println(documento.getTitulo());
-        System.out.println(documento.getTipo());
-        System.out.println(documento.getDataCriacao());
-        System.out.println(documento.getAutor());
-        System.out.println(documento.getCaminhoArquivo());
-        
+
+        Documento documento = em.find(Documento.class, id);
+
+        if (documento != null) {
+            System.out.println(documento.getTitulo());
+            System.out.println(documento.getTipo());
+            System.out.println(documento.getDataCriacao());
+            System.out.println(documento.getAutor());
+            System.out.println(documento.getCaminhoArquivo());
+        }
+
         em.close();
-    }    
-    
-    private static void consultarFeriado(long 1) {
-        EntityManager em = emf.createEntityManager();
-        
-        Feriado feriado = em.find(Feriado.class, 1);
-        
-        System.out.println(feriado.getData());
-        System.out.println(feriado.getNome());
-        System.out.println(feriado.getTipo());
-        
-        em.close();
-    } 
+    }
 }

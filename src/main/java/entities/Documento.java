@@ -5,6 +5,7 @@
 package entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,6 +28,7 @@ import utils.TipoDocumento;
 
 @Entity
 @Table(name = "TB_DOCUMENTO")
+//@DiscriminatorValue(value = "DOC")
 public class Documento {
     @Id
     @Column(name = "ID_DOCUMENTO")

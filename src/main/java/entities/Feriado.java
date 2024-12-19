@@ -5,6 +5,7 @@
 package entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,6 +25,7 @@ import utils.TipoFeriado;
 
 @Entity
 @Table(name = "TB_FERIADO")
+//@DiscriminatorValue(value = "FE")
 public class Feriado {
     @Id
     @Column(name = "ID_FERIADO")
