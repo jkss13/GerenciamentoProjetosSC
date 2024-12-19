@@ -43,8 +43,10 @@ public class Relatorio {
     @Column(name = "CONTEUDO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
     private String conteudo;
 
-    @OneToOne(mappedBy = "relatorio", optional = false, fetch = FetchType.LAZY)
+     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_PROJETO", nullable = false)
     private Projeto projeto;
+
 
     public Long getId() {
         return id;
@@ -111,26 +113,22 @@ public class Relatorio {
         this.conteudo = conteudo;
     }
 
-    @Override
+      @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Relatorio)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Relatorio other = (Relatorio) obj;
-        return Objects.equals(this.id, other.id);
+        Relatorio other = (Relatorio) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
     }
     
     @Override

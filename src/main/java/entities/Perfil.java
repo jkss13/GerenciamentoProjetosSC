@@ -54,24 +54,20 @@ public class Perfil {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Perfil)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Perfil other = (Perfil) obj;
-        return Objects.equals(this.id, other.id);
+        Perfil other = (Perfil) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
     }
     
     

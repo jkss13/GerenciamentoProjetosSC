@@ -10,8 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Entidade Usuario.
- * Representa os usuários do sistema.
+ * Entidade Usuario. Representa os usuários do sistema.
  */
 @Entity
 @Table(name = "TB_USUARIO")
@@ -38,6 +37,27 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "ID_PERFIL")
     )
     private Set<Perfil> perfis = new HashSet<>();
+
+    @OneToMany(mappedBy = "usuarioResponsavel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Tarefa> tarefas = new HashSet<>();
+
+    public Set<Tarefa> getTarefas() {
+        return tarefas;
+    }
+
+    public void setTarefas(Set<Tarefa> tarefas) {
+        this.tarefas = tarefas;
+    }
+
+    public void addTarefa(Tarefa tarefa) {
+        this.tarefas.add(tarefa);
+        tarefa.setUsuarioResponsavel(this);
+    }
+
+    public void removeTarefa(Tarefa tarefa) {
+        this.tarefas.remove(tarefa);
+        tarefa.setUsuarioResponsavel(null);
+    }
 
     public Long getId() {
         return id;
@@ -89,25 +109,20 @@ public class Usuario {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 17 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Usuario)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Usuario other = (Usuario) obj;
-        return Objects.equals(this.id, other.id);
+        Usuario other = (Usuario) object;
+
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
-    
-    
+
 }

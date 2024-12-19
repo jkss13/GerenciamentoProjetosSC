@@ -36,9 +36,10 @@ public class Recurso {
     @Column(name = "CUSTO_RECURSO" ,nullable = false, precision = 15, scale = 2)
     private Double custo;
     
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ID_PROJETO", nullable = false)
     private Projeto projeto;
+
 
     public Long getId() {
         return id;
@@ -96,26 +97,22 @@ public class Recurso {
         }
     }
 
-    @Override
+     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.id);
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Recurso)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Recurso other = (Recurso) obj;
-        return Objects.equals(this.id, other.id);
+        Recurso other = (Recurso) object;
+        
+        return !((this.id == null && other.id != null) || 
+                (this.id != null && !this.id.equals(other.id)));
     }
     
     @Override
