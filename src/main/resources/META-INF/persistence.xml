@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
+        <!--Ajuste para ficar igual ao do professor-->
       <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.client.ClientAutoloadedDriver"/>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:derby://localhost:1527/carga_trabalho;create=true"/>
       <property name="jakarta.persistence.jdbc.user" value="adm"/>
@@ -12,6 +13,7 @@
       <property name="eclipselink.logging.level" value="FINE"/>
       <property name="eclipselink.target-database" value="Derby"/>
       <property name="eclipselink.jdbc.native-sql" value="true"/>
+      <property name="eclipselink.weaving" value="static"/>
     </properties>
   </persistence-unit>
 </persistence>

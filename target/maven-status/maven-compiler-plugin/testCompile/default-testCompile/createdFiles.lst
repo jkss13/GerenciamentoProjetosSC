@@ -1,0 +1,7 @@
+tests\DocumentoCRUDTest.class
+tests\DbUnitUtil.class
+tests\GenericTest.class
+tests\ProjetoCRUDTest.class
+tests\ClienteCrudTest.class
+tests\CalendarioCrudTest.class
+tests\FeriadoCRUDTest.class

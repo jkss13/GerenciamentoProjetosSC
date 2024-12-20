@@ -7,8 +7,9 @@ package tests;
 import org.junit.jupiter.api.Test;
 import entities.Documento;
 import jakarta.persistence.TypedQuery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  *

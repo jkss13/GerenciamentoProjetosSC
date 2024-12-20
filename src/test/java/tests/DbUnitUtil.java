@@ -15,10 +15,9 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 
-
 public class DbUnitUtil {
 
-    private static final String XML_FILE = "/dbunit/dataset.xml";
+    private static final String XML_FILE = "dbunit/dataset.xml";
 
     public static void inserirDados() {
         Connection conn = null;
@@ -29,7 +28,11 @@ public class DbUnitUtil {
             db_conn = new DatabaseConnection(conn);
             FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
             builder.setColumnSensing(true);
-            InputStream in = DbUnitUtil.class.getResourceAsStream(XML_FILE);
+            InputStream in = DbUnitUtil.class.getClassLoader().getResourceAsStream(XML_FILE);
+            if (in == null) {
+                throw new RuntimeException("Arquivo de dataset não encontrado: " + XML_FILE);
+            }
+
             IDataSet dataSet = builder.build(in);
             DatabaseOperation.CLEAN_INSERT.execute(db_conn, dataSet);
         } catch (SQLException | DatabaseUnitException ex) {

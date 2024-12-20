@@ -1,0 +1,38 @@
+-------------------------------------------------------------------------------
+Test set: tests.CalendarioCrudTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.843 s <<< FAILURE! -- in tests.CalendarioCrudTest
+tests.CalendarioCrudTest -- Time elapsed: 1.843 s <<< ERROR!
+java.lang.RuntimeException: Falha ao configurar o teste.
+	at tests.GenericTest.setUpClass(GenericTest.java:37)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+Caused by: java.lang.RuntimeException: Exception processing table name='TB_PROJETO'
+	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:39)
+	at tests.GenericTest.setUpClass(GenericTest.java:32)
+	... 2 more
+Caused by: org.dbunit.DatabaseUnitException: Exception processing table name='TB_PROJETO'
+	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:240)
+	at org.dbunit.operation.CompositeOperation.execute(CompositeOperation.java:79)
+	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:37)
+	... 3 more
+Caused by: java.sql.SQLIntegrityConstraintViolationException: A coluna 'ID_CALENDARIO' não aceita valor nulo.
+	at org.apache.derby.client.am.SQLExceptionFactory.getSQLException(SQLExceptionFactory.java:79)
+	at org.apache.derby.client.am.SqlException.getSQLException(SqlException.java:325)
+	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1616)
+	at org.dbunit.database.statement.SimplePreparedStatement.addBatch(SimplePreparedStatement.java:85)
+	at org.dbunit.database.statement.AutomaticPreparedBatchStatement.addBatch(AutomaticPreparedBatchStatement.java:70)
+	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:224)
+	... 5 more
+Caused by: ERROR 23502: A coluna 'ID_CALENDARIO' não aceita valor nulo.
+	at org.apache.derby.client.am.ClientStatement.completeExecute(ClientStatement.java:1868)
+	at org.apache.derby.client.net.NetStatementReply.parseEXCSQLSTTreply(NetStatementReply.java:323)
+	at org.apache.derby.client.net.NetStatementReply.readExecute(NetStatementReply.java:72)
+	at org.apache.derby.client.net.StatementReply.readExecute(StatementReply.java:59)
+	at org.apache.derby.client.net.NetPreparedStatement.readExecute_(NetPreparedStatement.java:167)
+	at org.apache.derby.client.am.ClientPreparedStatement.readExecute(ClientPreparedStatement.java:1844)
+	at org.apache.derby.client.am.ClientPreparedStatement.flowExecute(ClientPreparedStatement.java:2133)
+	at org.apache.derby.client.am.ClientPreparedStatement.executeX(ClientPreparedStatement.java:1622)
+	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1607)
+	... 8 more
+
