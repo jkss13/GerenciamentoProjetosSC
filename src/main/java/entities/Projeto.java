@@ -76,7 +76,7 @@ public class Projeto implements Serializable {
 
     // ONE TO ONE
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "ID_CALENDARIO", nullable = false)
+    @JoinColumn(name = "ID_CALENDARIO", nullable = true)
     private Calendario calendario;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
@@ -191,20 +191,13 @@ public class Projeto implements Serializable {
     public Calendario getCalendario() {
         return calendario;
     }
-
-   public void setCalendario(Calendario calendario) {
-    if (this.calendario != calendario) { // Previne loops recursivos
-        if (this.calendario != null) {
-            this.calendario.setProjeto(null); 
-        }
-
+ public void setCalendario(Calendario calendario) {
         this.calendario = calendario;
-
+        // Evita loop ao configurar o relacionamento bidirecional
         if (calendario != null && calendario.getProjeto() != this) {
             calendario.setProjeto(this);
         }
     }
-}
 
     // OneToOne Relatorio
     public Relatorio getRelatorio() {

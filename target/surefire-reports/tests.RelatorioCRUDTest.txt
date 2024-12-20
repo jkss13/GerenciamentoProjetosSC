@@ -1,4 +1,14 @@
 -------------------------------------------------------------------------------
 Test set: tests.RelatorioCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.668 s -- in tests.RelatorioCRUDTest
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.642 s <<< FAILURE! -- in tests.RelatorioCRUDTest
+tests.RelatorioCRUDTest.removerRelatorio -- Time elapsed: 0.012 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.RelatorioCRUDTest.removerRelatorio(RelatorioCRUDTest.java:142)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
