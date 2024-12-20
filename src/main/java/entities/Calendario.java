@@ -57,18 +57,19 @@ public class Calendario implements Serializable{
         return projeto;
     }
     
-    // Setter de Projeto com sincronização bidirecional
     public void setProjeto(Projeto projeto) {
+    if (this.projeto != projeto) { // Previne loops recursivos
         if (this.projeto != null) {
             this.projeto.setCalendario(null); 
         }
 
         this.projeto = projeto;
 
-        if (projeto != null) {
+        if (projeto != null && projeto.getCalendario() != this) {
             projeto.setCalendario(this);
         }
     }
+}
 
     public Long getId() {
         return id;

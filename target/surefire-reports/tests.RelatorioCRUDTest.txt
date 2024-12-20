@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------------
+Test set: tests.RelatorioCRUDTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 3.383 s <<< FAILURE! -- in tests.RelatorioCRUDTest
+tests.RelatorioCRUDTest.atualizarRelatorio -- Time elapsed: 0.517 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.RelatorioCRUDTest.atualizarRelatorio(RelatorioCRUDTest.java:113)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.RelatorioCRUDTest.removerRelatorio -- Time elapsed: 0.007 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.RelatorioCRUDTest.removerRelatorio(RelatorioCRUDTest.java:141)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.RelatorioCRUDTest.consultarRelatorioComRelacionamento -- Time elapsed: 0.008 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.RelatorioCRUDTest.consultarRelatorioComRelacionamento(RelatorioCRUDTest.java:168)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

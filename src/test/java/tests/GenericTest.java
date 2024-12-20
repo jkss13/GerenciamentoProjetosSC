@@ -33,7 +33,6 @@ public abstract class GenericTest {
             logger.info("Dados de teste inseridos com sucesso.");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Erro ao inicializar EntityManagerFactory: {0}", e.getMessage());
-            // Adiciona detalhes do erro no console
             throw new RuntimeException("Falha ao configurar o teste.", e);
         }
     }
@@ -60,10 +59,16 @@ public abstract class GenericTest {
     @AfterEach
     public void tearDown() {
         if (em != null && em.isOpen()) {
-            commitTransaction();
-            logger.info("Fechando EntityManager...");
-            em.close();
-            logger.info("EntityManager fechado com sucesso.");
+            try {
+                commitTransaction();
+            } catch (Exception e) {
+                logger.severe("Erro ao finalizar transação no tearDown: " + e.getMessage());
+                rollbackTransaction(); // Garante que rollback seja realizado se necessário
+            } finally {
+                logger.info("Fechando EntityManager...");
+                em.close();
+                logger.info("EntityManager fechado com sucesso.");
+            }
         }
     }
 
@@ -74,7 +79,7 @@ public abstract class GenericTest {
     }
 
     private void commitTransaction() {
-        if (et != null) {
+        if (et != null && et.isActive()) {
             try {
                 if (!et.getRollbackOnly()) {
                     logger.info("Commit da transação...");
@@ -84,9 +89,25 @@ public abstract class GenericTest {
                     et.rollback();
                 }
             } catch (Exception e) {
-                logger.severe("Erro ao finalizar a transação: " + e.getMessage());
+                logger.severe("Erro ao realizar commit ou rollback: " + e.getMessage());
                 throw e;
             }
+        } else {
+            logger.warning("Nenhuma transação ativa para commit.");
+        }
+    }
+
+    private void rollbackTransaction() {
+        if (et != null && et.isActive()) {
+            try {
+                logger.warning("Realizando rollback da transação...");
+                et.rollback();
+            } catch (Exception e) {
+                logger.severe("Erro ao realizar rollback: " + e.getMessage());
+                throw e;
+            }
+        } else {
+            logger.warning("Nenhuma transação ativa para rollback.");
         }
     }
 

@@ -1,38 +1,57 @@
 -------------------------------------------------------------------------------
 Test set: tests.ProjetoCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.797 s <<< FAILURE! -- in tests.ProjetoCRUDTest
-tests.ProjetoCRUDTest -- Time elapsed: 0.797 s <<< ERROR!
-java.lang.RuntimeException: Falha ao configurar o teste.
-	at tests.GenericTest.setUpClass(GenericTest.java:37)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-Caused by: java.lang.RuntimeException: Exception processing table name='TB_PROJETO'
-	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:39)
-	at tests.GenericTest.setUpClass(GenericTest.java:32)
-	... 2 more
-Caused by: org.dbunit.DatabaseUnitException: Exception processing table name='TB_PROJETO'
-	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:240)
-	at org.dbunit.operation.CompositeOperation.execute(CompositeOperation.java:79)
-	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:37)
-	... 3 more
-Caused by: java.sql.SQLIntegrityConstraintViolationException: A coluna 'ID_CALENDARIO' não aceita valor nulo.
-	at org.apache.derby.client.am.SQLExceptionFactory.getSQLException(SQLExceptionFactory.java:79)
-	at org.apache.derby.client.am.SqlException.getSQLException(SqlException.java:325)
-	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1616)
-	at org.dbunit.database.statement.SimplePreparedStatement.addBatch(SimplePreparedStatement.java:85)
-	at org.dbunit.database.statement.AutomaticPreparedBatchStatement.addBatch(AutomaticPreparedBatchStatement.java:70)
-	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:224)
-	... 5 more
-Caused by: ERROR 23502: A coluna 'ID_CALENDARIO' não aceita valor nulo.
-	at org.apache.derby.client.am.ClientStatement.completeExecute(ClientStatement.java:1868)
-	at org.apache.derby.client.net.NetStatementReply.parseEXCSQLSTTreply(NetStatementReply.java:323)
-	at org.apache.derby.client.net.NetStatementReply.readExecute(NetStatementReply.java:72)
-	at org.apache.derby.client.net.StatementReply.readExecute(StatementReply.java:59)
-	at org.apache.derby.client.net.NetPreparedStatement.readExecute_(NetPreparedStatement.java:167)
-	at org.apache.derby.client.am.ClientPreparedStatement.readExecute(ClientPreparedStatement.java:1844)
-	at org.apache.derby.client.am.ClientPreparedStatement.flowExecute(ClientPreparedStatement.java:2133)
-	at org.apache.derby.client.am.ClientPreparedStatement.executeX(ClientPreparedStatement.java:1622)
-	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1607)
-	... 8 more
+Tests run: 5, Failures: 1, Errors: 4, Skipped: 0, Time elapsed: 1.253 s <<< FAILURE! -- in tests.ProjetoCRUDTest
+tests.ProjetoCRUDTest.adicionarRecursosAoProjeto -- Time elapsed: 0.013 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.ProjetoCRUDTest.adicionarRecursosAoProjeto(ProjetoCRUDTest.java:98)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.ProjetoCRUDTest.persistirProjeto -- Time elapsed: 0.008 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: not <null>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertNotNull.failNull(AssertNotNull.java:49)
+	at org.junit.jupiter.api.AssertNotNull.assertNotNull(AssertNotNull.java:35)
+	at org.junit.jupiter.api.AssertNotNull.assertNotNull(AssertNotNull.java:30)
+	at org.junit.jupiter.api.Assertions.assertNotNull(Assertions.java:304)
+	at tests.ProjetoCRUDTest.persistirProjeto(ProjetoCRUDTest.java:29)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.ProjetoCRUDTest.removerProjeto -- Time elapsed: 0.005 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.ProjetoCRUDTest.removerProjeto(ProjetoCRUDTest.java:80)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.ProjetoCRUDTest.atualizarProjeto -- Time elapsed: 0.005 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.ProjetoCRUDTest.atualizarProjeto(ProjetoCRUDTest.java:61)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.ProjetoCRUDTest.consultarProjetoComRelacionamentos -- Time elapsed: 0.005 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.ProjetoCRUDTest.consultarProjetoComRelacionamentos(ProjetoCRUDTest.java:127)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 

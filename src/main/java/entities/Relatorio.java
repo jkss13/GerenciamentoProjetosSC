@@ -4,6 +4,7 @@
  */
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,16 +38,14 @@ public class Relatorio {
     @Column(name = "AUTOR_RELATORIO" ,nullable = false, length = 255)
     private String autor;
 
-    @Column(name = "DESCRICAO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
+    @Column(name = "DESCRICAO_RELATORIO" ,nullable = false)
     private String descricao;
 
-    @Column(name = "CONTEUDO_RELATORIO" ,nullable = false, columnDefinition = "TEXT")
+    @Column(name = "CONTEUDO_RELATORIO" ,nullable = false)
     private String conteudo;
 
-     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PROJETO", nullable = false)
+       @OneToOne(mappedBy = "relatorio", optional = false)
     private Projeto projeto;
-
 
     public Long getId() {
         return id;

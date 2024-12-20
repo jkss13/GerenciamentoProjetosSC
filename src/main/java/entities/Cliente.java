@@ -47,8 +47,12 @@ public class Cliente implements Serializable{
     @Column(name = "NUM_TELEFONE", nullable = false, length = 20)
     private Collection<String> telefones;
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+      @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Projeto> projetos;
+
+    public Cliente() {
+        this.projetos = new ArrayList<>();
+    }
 
     public void setTelefones(Collection<String> telefones) {
         this.telefones = telefones;
@@ -97,19 +101,19 @@ public class Cliente implements Serializable{
         telefones.add(telefone);
     }
 
-    public List<Projeto> getProjetos() {
+      public List<Projeto> getProjetos() {
         return projetos;
     }
 
     public void setProjetos(List<Projeto> projetos) {
         this.projetos = projetos;
-        // Adiciona o Cliente a cada Projeto na lista de cliente
-        for (Projeto projeto : projetos) {
-            if (projeto.getCliente() != this) {
-                projeto.setCliente(this);  // Define o Cliente no Projeto
-            }
-        }
     }
+
+    public void adicionarProjeto(Projeto projeto) {
+        this.projetos.add(projeto);
+        projeto.setCliente(this);
+    }
+
 
     // Método auxiliar para adicionar um Projeto individualmente
     public void addProjeto(Projeto projeto) {

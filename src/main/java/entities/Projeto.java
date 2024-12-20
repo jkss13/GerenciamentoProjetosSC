@@ -192,19 +192,31 @@ public class Projeto implements Serializable {
         return calendario;
     }
 
-    public void setCalendario(Calendario calendario) {
+   public void setCalendario(Calendario calendario) {
+    if (this.calendario != calendario) { // Previne loops recursivos
+        if (this.calendario != null) {
+            this.calendario.setProjeto(null); 
+        }
+
         this.calendario = calendario;
-        calendario.setProjeto(this); // Define o Projeto no Calendário
+
+        if (calendario != null && calendario.getProjeto() != this) {
+            calendario.setProjeto(this);
+        }
     }
+}
 
     // OneToOne Relatorio
     public Relatorio getRelatorio() {
         return relatorio;
     }
 
-    public void setRelatorio(Relatorio relatorio) {
+  public void setRelatorio(Relatorio relatorio) {
         this.relatorio = relatorio;
-        relatorio.setProjeto(this); // Define o Projeto no Relatório
+        // Evita loop ao configurar o relacionamento bidirecional
+        if (relatorio != null && relatorio.getProjeto() != this) {
+            relatorio.setProjeto(this);
+        }
     }
 
     @Override

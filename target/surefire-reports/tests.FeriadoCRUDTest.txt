@@ -1,36 +1,46 @@
 -------------------------------------------------------------------------------
-Test set: tests.CalendarioCrudTest
+Test set: tests.FeriadoCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 3.769 s <<< FAILURE! -- in tests.CalendarioCrudTest
-tests.CalendarioCrudTest.removerCalendario -- Time elapsed: 0.611 s <<< ERROR!
+Tests run: 5, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 0.952 s <<< FAILURE! -- in tests.FeriadoCRUDTest
+tests.FeriadoCRUDTest.consultarFeriadoPorNome -- Time elapsed: 0.007 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
 	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
-	at tests.CalendarioCrudTest.removerCalendario(CalendarioCrudTest.java:64)
+	at tests.FeriadoCRUDTest.consultarFeriadoPorNome(FeriadoCRUDTest.java:42)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.CalendarioCrudTest.persistirCalendario -- Time elapsed: 0.113 s <<< ERROR!
+tests.FeriadoCRUDTest.consultarFeriadoPorTipo -- Time elapsed: 0.006 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.FeriadoCRUDTest.consultarFeriadoPorTipo(FeriadoCRUDTest.java:94)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.FeriadoCRUDTest.persistirFeriado -- Time elapsed: 0.017 s <<< ERROR!
 jakarta.persistence.PersistenceException: 
 Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
-Internal Exception: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000355-476814c0-0193-e4d0-c454-00006c068f0f' definida em 'TB_CALENDARIO'.
+Internal Exception: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000113-36b5869d-0193-e2fc-d680-00006c068f0f' definida em 'TB_FERIADO'.
 Error Code: 20000
-Call: INSERT INTO TB_CALENDARIO (DATA_FIM, DATA_INICIO, HORAS_TOTAIS) VALUES (?, ?, ?)
-	bind => [2024-12-31, 2024-01-01, 2000]
-Query: InsertObjectQuery(exemplo.jpa.Calendario[ id=null ])
+Call: INSERT INTO TB_FERIADO (DATA_FERIADO, NOME_FERIADO, TIPO_FERIADO) VALUES (?, ?, ?)
+	bind => [2024-12-20, Dia da Independência, NACIONAL]
+Query: InsertObjectQuery(exemplo.jpa.Feriado[ id=null ])
 	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.flush(EntityManagerImpl.java:967)
-	at tests.CalendarioCrudTest.persistirCalendario(CalendarioCrudTest.java:32)
+	at tests.FeriadoCRUDTest.persistirFeriado(FeriadoCRUDTest.java:28)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 Caused by: Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
-Internal Exception: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000355-476814c0-0193-e4d0-c454-00006c068f0f' definida em 'TB_CALENDARIO'.
+Internal Exception: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000113-36b5869d-0193-e2fc-d680-00006c068f0f' definida em 'TB_FERIADO'.
 Error Code: 20000
-Call: INSERT INTO TB_CALENDARIO (DATA_FIM, DATA_INICIO, HORAS_TOTAIS) VALUES (?, ?, ?)
-	bind => [2024-12-31, 2024-01-01, 2000]
-Query: InsertObjectQuery(exemplo.jpa.Calendario[ id=null ])
+Call: INSERT INTO TB_FERIADO (DATA_FERIADO, NOME_FERIADO, TIPO_FERIADO) VALUES (?, ?, ?)
+	bind => [2024-12-20, Dia da Independência, NACIONAL]
+Query: InsertObjectQuery(exemplo.jpa.Feriado[ id=null ])
 	at org.eclipse.persistence.exceptions.DatabaseException.sqlException(DatabaseException.java:334)
 	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeDirectNoSelect(DatabaseAccessor.java:919)
 	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeNoSelect(DatabaseAccessor.java:981)
@@ -64,13 +74,13 @@ Query: InsertObjectQuery(exemplo.jpa.Calendario[ id=null ])
 	at org.eclipse.persistence.internal.sessions.RepeatableWriteUnitOfWork.writeChanges(RepeatableWriteUnitOfWork.java:478)
 	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.flush(EntityManagerImpl.java:962)
 	... 4 more
-Caused by: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000355-476814c0-0193-e4d0-c454-00006c068f0f' definida em 'TB_CALENDARIO'.
+Caused by: org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000113-36b5869d-0193-e2fc-d680-00006c068f0f' definida em 'TB_FERIADO'.
 	at org.apache.derby.client.am.SQLExceptionFactory.getSQLException(SQLExceptionFactory.java:85)
 	at org.apache.derby.client.am.SqlException.getSQLException(SqlException.java:325)
 	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:405)
 	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeDirectNoSelect(DatabaseAccessor.java:909)
 	... 34 more
-Caused by: ERROR 23505: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000355-476814c0-0193-e4d0-c454-00006c068f0f' definida em 'TB_CALENDARIO'.
+Caused by: ERROR 23505: A instrução foi interrompida, porque iria gerar um valor duplicado da chave em uma restrição de chave primária ou de unicidade identificada por 'SQL0000000113-36b5869d-0193-e2fc-d680-00006c068f0f' definida em 'TB_FERIADO'.
 	at org.apache.derby.client.am.ClientStatement.completeExecute(ClientStatement.java:1868)
 	at org.apache.derby.client.net.NetStatementReply.parseEXCSQLSTTreply(NetStatementReply.java:323)
 	at org.apache.derby.client.net.NetStatementReply.readExecute(NetStatementReply.java:72)
@@ -81,4 +91,24 @@ Caused by: ERROR 23505: A instrução foi interrompida, porque iria gerar um val
 	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdateX(ClientPreparedStatement.java:410)
 	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:396)
 	... 35 more
+
+tests.FeriadoCRUDTest.removerFeriado -- Time elapsed: 0.004 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.FeriadoCRUDTest.removerFeriado(FeriadoCRUDTest.java:75)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.FeriadoCRUDTest.atualizarFeriado -- Time elapsed: 0.003 s <<< ERROR!
+jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
+	at org.eclipse.persistence.internal.jpa.EJBQueryImpl.getSingleResult(EJBQueryImpl.java:400)
+	at tests.FeriadoCRUDTest.atualizarFeriado(FeriadoCRUDTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 

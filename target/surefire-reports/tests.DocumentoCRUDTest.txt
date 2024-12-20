@@ -1,30 +1,96 @@
 -------------------------------------------------------------------------------
 Test set: tests.DocumentoCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.841 s <<< FAILURE! -- in tests.DocumentoCRUDTest
-tests.DocumentoCRUDTest -- Time elapsed: 0.841 s <<< ERROR!
-java.lang.RuntimeException: Falha ao configurar o teste.
-	at tests.GenericTest.setUpClass(GenericTest.java:37)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-Caused by: java.lang.RuntimeException: Exception processing table name='TB_PROJETO'
-	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:39)
-	at tests.GenericTest.setUpClass(GenericTest.java:32)
-	... 2 more
-Caused by: org.dbunit.DatabaseUnitException: Exception processing table name='TB_PROJETO'
-	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:240)
-	at org.dbunit.operation.CompositeOperation.execute(CompositeOperation.java:79)
-	at tests.DbUnitUtil.inserirDados(DbUnitUtil.java:37)
-	... 3 more
-Caused by: java.sql.SQLIntegrityConstraintViolationException: A coluna 'ID_CALENDARIO' não aceita valor nulo.
+Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 1.375 s <<< FAILURE! -- in tests.DocumentoCRUDTest
+tests.DocumentoCRUDTest.atualizarDocumento -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1245)
+	at tests.DocumentoCRUDTest.atualizarDocumento(DocumentoCRUDTest.java:34)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.DocumentoCRUDTest.atualizarDocumentoMerge -- Time elapsed: 0.007 s <<< ERROR!
+java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1245)
+	at tests.DocumentoCRUDTest.atualizarDocumentoMerge(DocumentoCRUDTest.java:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.DocumentoCRUDTest.removerDocumento -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1245)
+	at tests.DocumentoCRUDTest.removerDocumento(DocumentoCRUDTest.java:63)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+tests.DocumentoCRUDTest.persistirDocumento -- Time elapsed: 0.092 s <<< ERROR!
+jakarta.persistence.PersistenceException: 
+Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: java.sql.SQLIntegrityConstraintViolationException: A coluna 'AUTOR_DOCUMENTO' não aceita valor nulo.
+Error Code: 20000
+Call: INSERT INTO TB_DOCUMENTO (AUTOR_DOCUMENTO, CAMINHO_ARQUIVO_DOCUMENTO, DATA_CRIACAO_DOCUMENTO, TIPO_DOCUMENTO, TITULO_DOCUMENTO, ID_PROJETO) VALUES (?, ?, ?, ?, ?, ?)
+	bind => [null, null, null, null, DOCUMENTO REQUISITOS, null]
+Query: InsertObjectQuery(exemplo.jpa.Documento[ id=null ])
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.flush(EntityManagerImpl.java:967)
+	at tests.DocumentoCRUDTest.persistirDocumento(DocumentoCRUDTest.java:27)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: java.sql.SQLIntegrityConstraintViolationException: A coluna 'AUTOR_DOCUMENTO' não aceita valor nulo.
+Error Code: 20000
+Call: INSERT INTO TB_DOCUMENTO (AUTOR_DOCUMENTO, CAMINHO_ARQUIVO_DOCUMENTO, DATA_CRIACAO_DOCUMENTO, TIPO_DOCUMENTO, TITULO_DOCUMENTO, ID_PROJETO) VALUES (?, ?, ?, ?, ?, ?)
+	bind => [null, null, null, null, DOCUMENTO REQUISITOS, null]
+Query: InsertObjectQuery(exemplo.jpa.Documento[ id=null ])
+	at org.eclipse.persistence.exceptions.DatabaseException.sqlException(DatabaseException.java:334)
+	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeDirectNoSelect(DatabaseAccessor.java:919)
+	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeNoSelect(DatabaseAccessor.java:981)
+	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.basicExecuteCall(DatabaseAccessor.java:642)
+	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeCall(DatabaseAccessor.java:569)
+	at org.eclipse.persistence.internal.sessions.AbstractSession.basicExecuteCall(AbstractSession.java:2048)
+	at org.eclipse.persistence.sessions.server.ClientSession.executeCall(ClientSession.java:311)
+	at org.eclipse.persistence.internal.queries.DatasourceCallQueryMechanism.executeCall(DatasourceCallQueryMechanism.java:280)
+	at org.eclipse.persistence.internal.queries.DatasourceCallQueryMechanism.executeCall(DatasourceCallQueryMechanism.java:266)
+	at org.eclipse.persistence.internal.queries.DatasourceCallQueryMechanism.insertObject(DatasourceCallQueryMechanism.java:436)
+	at org.eclipse.persistence.internal.queries.StatementQueryMechanism.insertObject(StatementQueryMechanism.java:193)
+	at org.eclipse.persistence.internal.queries.StatementQueryMechanism.insertObject(StatementQueryMechanism.java:209)
+	at org.eclipse.persistence.internal.queries.DatabaseQueryMechanism.insertObjectForWrite(DatabaseQueryMechanism.java:514)
+	at org.eclipse.persistence.queries.InsertObjectQuery.executeCommit(InsertObjectQuery.java:86)
+	at org.eclipse.persistence.queries.InsertObjectQuery.executeCommitWithChangeSet(InsertObjectQuery.java:97)
+	at org.eclipse.persistence.internal.queries.DatabaseQueryMechanism.executeWriteWithChangeSet(DatabaseQueryMechanism.java:326)
+	at org.eclipse.persistence.queries.WriteObjectQuery.executeDatabaseQuery(WriteObjectQuery.java:61)
+	at org.eclipse.persistence.queries.DatabaseQuery.execute(DatabaseQuery.java:913)
+	at org.eclipse.persistence.queries.DatabaseQuery.executeInUnitOfWork(DatabaseQuery.java:812)
+	at org.eclipse.persistence.queries.ObjectLevelModifyQuery.executeInUnitOfWorkObjectLevelModifyQuery(ObjectLevelModifyQuery.java:109)
+	at org.eclipse.persistence.queries.ObjectLevelModifyQuery.executeInUnitOfWork(ObjectLevelModifyQuery.java:86)
+	at org.eclipse.persistence.internal.sessions.UnitOfWorkImpl.internalExecuteQuery(UnitOfWorkImpl.java:3028)
+	at org.eclipse.persistence.internal.sessions.AbstractSession.executeQuery(AbstractSession.java:1841)
+	at org.eclipse.persistence.internal.sessions.AbstractSession.executeQuery(AbstractSession.java:1823)
+	at org.eclipse.persistence.internal.sessions.AbstractSession.executeQuery(AbstractSession.java:1773)
+	at org.eclipse.persistence.internal.sessions.CommitManager.commitNewObjectsForClassWithChangeSet(CommitManager.java:248)
+	at org.eclipse.persistence.internal.sessions.CommitManager.commitAllObjectsWithChangeSet(CommitManager.java:147)
+	at org.eclipse.persistence.internal.sessions.AbstractSession.writeAllObjectsWithChangeSet(AbstractSession.java:4335)
+	at org.eclipse.persistence.internal.sessions.UnitOfWorkImpl.commitToDatabase(UnitOfWorkImpl.java:1518)
+	at org.eclipse.persistence.internal.sessions.UnitOfWorkImpl.commitToDatabaseWithPreBuiltChangeSet(UnitOfWorkImpl.java:1664)
+	at org.eclipse.persistence.internal.sessions.RepeatableWriteUnitOfWork.writeChanges(RepeatableWriteUnitOfWork.java:478)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.flush(EntityManagerImpl.java:962)
+	... 4 more
+Caused by: java.sql.SQLIntegrityConstraintViolationException: A coluna 'AUTOR_DOCUMENTO' não aceita valor nulo.
 	at org.apache.derby.client.am.SQLExceptionFactory.getSQLException(SQLExceptionFactory.java:79)
 	at org.apache.derby.client.am.SqlException.getSQLException(SqlException.java:325)
-	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1616)
-	at org.dbunit.database.statement.SimplePreparedStatement.addBatch(SimplePreparedStatement.java:85)
-	at org.dbunit.database.statement.AutomaticPreparedBatchStatement.addBatch(AutomaticPreparedBatchStatement.java:70)
-	at org.dbunit.operation.AbstractBatchOperation.execute(AbstractBatchOperation.java:224)
-	... 5 more
-Caused by: ERROR 23502: A coluna 'ID_CALENDARIO' não aceita valor nulo.
+	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:405)
+	at org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor.executeDirectNoSelect(DatabaseAccessor.java:909)
+	... 34 more
+Caused by: ERROR 23502: A coluna 'AUTOR_DOCUMENTO' não aceita valor nulo.
 	at org.apache.derby.client.am.ClientStatement.completeExecute(ClientStatement.java:1868)
 	at org.apache.derby.client.net.NetStatementReply.parseEXCSQLSTTreply(NetStatementReply.java:323)
 	at org.apache.derby.client.net.NetStatementReply.readExecute(NetStatementReply.java:72)
@@ -32,7 +98,7 @@ Caused by: ERROR 23502: A coluna 'ID_CALENDARIO' não aceita valor nulo.
 	at org.apache.derby.client.net.NetPreparedStatement.readExecute_(NetPreparedStatement.java:167)
 	at org.apache.derby.client.am.ClientPreparedStatement.readExecute(ClientPreparedStatement.java:1844)
 	at org.apache.derby.client.am.ClientPreparedStatement.flowExecute(ClientPreparedStatement.java:2133)
-	at org.apache.derby.client.am.ClientPreparedStatement.executeX(ClientPreparedStatement.java:1622)
-	at org.apache.derby.client.am.ClientPreparedStatement.execute(ClientPreparedStatement.java:1607)
-	... 8 more
+	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdateX(ClientPreparedStatement.java:410)
+	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:396)
+	... 35 more
 
