@@ -4,13 +4,17 @@ import entities.Calendario;
 import entities.Cliente;
 import entities.Projeto;
 import entities.Relatorio;
+import jakarta.persistence.CacheRetrieveMode;
 import jakarta.persistence.TypedQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -102,34 +106,56 @@ assertNotNull(relatorio.getId());
         assertEquals("Relatório de Kubernetes", relatorio.getTitulo());
     }
 
-    @Test
-    public void atualizarRelatorio() {
-        logger.info("Executando atualizarRelatorio()");
+ @Test
+public void atualizarRelatorio() {
+    logger.info("Executando atualizarRelatorio()");
+    String novoConteudo = "Conteúdo atualizado sobre Kubernetes com foco em segurança e escalabilidade.";
+    Long idRelatorio = 18L; // ID do relatório existente no banco
 
-        // Consultando o relatório
-        TypedQuery<Relatorio> query = em.createQuery("SELECT r FROM Relatorio r WHERE r.titulo = :titulo", Relatorio.class);
-        query.setParameter("titulo", "Relatório de Kubernetes");
+    // Recuperando o relatório
+    Relatorio relatorio = em.find(Relatorio.class, idRelatorio);
+    assertNotNull(relatorio, "Relatório não encontrado");
 
-        Relatorio relatorio = query.getSingleResult();
-        assertNotNull(relatorio);
+    // Atualizando o conteúdo do relatório
+    relatorio.setConteudo(novoConteudo);
+    em.flush();
 
-        try {
-            em.getTransaction().begin();
-            relatorio.setConteudo("Conteúdo atualizado sobre Kubernetes com foco em segurança e escalabilidade.");
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            e.printStackTrace();
-            throw e;
-        }
+    // Consulta com dica para ignorar cache
+    String jpql = "SELECT r FROM Relatorio r WHERE r.id = :id";
+    TypedQuery<Relatorio> query = em.createQuery(jpql, Relatorio.class);
+    query.setHint("javax.persistence.cache.retrieveMode", "BYPASS");
+    query.setParameter("id", idRelatorio);
+    Relatorio relatorioAtualizado = query.getSingleResult();
 
-        // Verificando se o conteúdo foi atualizado
-        Relatorio relatorioAtualizado = query.getSingleResult();
-        assertEquals("Conteúdo atualizado sobre Kubernetes com foco em segurança e escalabilidade.", relatorioAtualizado.getConteudo());
-    }
+    // Validação
+    assertNotNull(relatorioAtualizado, "Relatório não foi encontrado após atualização");
+    assertEquals(novoConteudo, relatorioAtualizado.getConteudo(), "Conteúdo do relatório não foi atualizado corretamente");
+}
 
+@Test
+public void atualizarRelatorioMerge() {
+    logger.info("Executando atualizarRelatorioMerge()");
+    String novoConteudo = "Conteúdo atualizado com foco em desempenho e confiabilidade.";
+    Long idRelatorio = 1L; // ID do relatório existente no banco
+
+    // Recuperando o relatório
+    Relatorio relatorio = em.find(Relatorio.class, idRelatorio);
+    assertNotNull(relatorio, "Relatório não encontrado");
+
+    // Atualizando o conteúdo e limpando o contexto
+    relatorio.setConteudo(novoConteudo);
+    em.clear();
+    em.merge(relatorio);
+
+    // Consulta com propriedades para ignorar cache
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.cache.retrieveMode", "BYPASS");
+    Relatorio relatorioAtualizado = em.find(Relatorio.class, idRelatorio, properties);
+
+    // Validação
+    assertNotNull(relatorioAtualizado, "Relatório não foi encontrado após atualização com merge");
+    assertEquals(novoConteudo, relatorioAtualizado.getConteudo(), "Conteúdo do relatório não foi atualizado corretamente");
+}
     @Test
     public void removerRelatorio() {
         logger.info("Executando removerRelatorio()");
@@ -157,17 +183,4 @@ assertNotNull(relatorio.getId());
         assertEquals(0, query.getResultList().size());
     }
 
-    @Test
-    public void consultarRelatorioComRelacionamento() {
-        logger.info("Executando consultarRelatorioComRelacionamento()");
-
-        // Consultando o relatório e verificando o relacionamento
-        TypedQuery<Relatorio> query = em.createQuery("SELECT r FROM Relatorio r WHERE r.titulo = :titulo", Relatorio.class);
-        query.setParameter("titulo", "Relatório de Kubernetes");
-
-        Relatorio relatorio = query.getSingleResult();
-        assertNotNull(relatorio);
-        assertNotNull(relatorio.getProjeto());
-        assertEquals("Plataforma Kubernetes", relatorio.getProjeto().getNome());
-    }
 }

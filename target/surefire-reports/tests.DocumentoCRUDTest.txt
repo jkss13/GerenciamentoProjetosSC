@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: tests.DocumentoCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 1.375 s <<< FAILURE! -- in tests.DocumentoCRUDTest
+Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 1.129 s <<< FAILURE! -- in tests.DocumentoCRUDTest
 tests.DocumentoCRUDTest.atualizarDocumento -- Time elapsed: 0.004 s <<< ERROR!
 java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
@@ -12,7 +12,7 @@ java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not fo
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.DocumentoCRUDTest.atualizarDocumentoMerge -- Time elapsed: 0.007 s <<< ERROR!
+tests.DocumentoCRUDTest.atualizarDocumentoMerge -- Time elapsed: 0.003 s <<< ERROR!
 java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
 	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
@@ -22,7 +22,7 @@ java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not fo
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.DocumentoCRUDTest.removerDocumento -- Time elapsed: 0.005 s <<< ERROR!
+tests.DocumentoCRUDTest.removerDocumento -- Time elapsed: 0.003 s <<< ERROR!
 java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not found.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:365)
 	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
@@ -32,7 +32,7 @@ java.lang.IllegalArgumentException: NamedQuery of name: Documento.PorNome not fo
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.DocumentoCRUDTest.persistirDocumento -- Time elapsed: 0.092 s <<< ERROR!
+tests.DocumentoCRUDTest.persistirDocumento -- Time elapsed: 0.058 s <<< ERROR!
 jakarta.persistence.PersistenceException: 
 Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
 Internal Exception: java.sql.SQLIntegrityConstraintViolationException: A coluna 'AUTOR_DOCUMENTO' não aceita valor nulo.

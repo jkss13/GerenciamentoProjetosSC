@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: tests.ClienteCrudTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 1.459 s <<< FAILURE! -- in tests.ClienteCrudTest
+Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 1.129 s <<< FAILURE! -- in tests.ClienteCrudTest
 tests.ClienteCrudTest.atualizarCliente -- Time elapsed: 0.016 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
@@ -22,7 +22,7 @@ jakarta.persistence.NoResultException: getSingleResult() did not retrieve any en
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.ClienteCrudTest.persistirCliente -- Time elapsed: 0.162 s <<< ERROR!
+tests.ClienteCrudTest.persistirCliente -- Time elapsed: 0.145 s <<< ERROR!
 jakarta.persistence.PersistenceException: 
 Exception [EclipseLink-4002] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.DatabaseException
 Internal Exception: java.sql.SQLIntegrityConstraintViolationException: A coluna 'ID_CALENDARIO' não aceita valor nulo.
@@ -93,7 +93,7 @@ Caused by: ERROR 23502: A coluna 'ID_CALENDARIO' não aceita valor nulo.
 	at org.apache.derby.client.am.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:396)
 	... 36 more
 
-tests.ClienteCrudTest.removerCliente -- Time elapsed: 0.007 s <<< ERROR!
+tests.ClienteCrudTest.removerCliente -- Time elapsed: 0.008 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)

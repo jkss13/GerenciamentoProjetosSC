@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: tests.ProjetoCRUDTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 1, Errors: 4, Skipped: 0, Time elapsed: 1.253 s <<< FAILURE! -- in tests.ProjetoCRUDTest
-tests.ProjetoCRUDTest.adicionarRecursosAoProjeto -- Time elapsed: 0.013 s <<< ERROR!
+Tests run: 5, Failures: 1, Errors: 4, Skipped: 0, Time elapsed: 0.833 s <<< FAILURE! -- in tests.ProjetoCRUDTest
+tests.ProjetoCRUDTest.adicionarRecursosAoProjeto -- Time elapsed: 0.008 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
@@ -12,7 +12,7 @@ jakarta.persistence.NoResultException: getSingleResult() did not retrieve any en
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.ProjetoCRUDTest.persistirProjeto -- Time elapsed: 0.008 s <<< FAILURE!
+tests.ProjetoCRUDTest.persistirProjeto -- Time elapsed: 0.009 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: not <null>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -35,7 +35,7 @@ jakarta.persistence.NoResultException: getSingleResult() did not retrieve any en
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.ProjetoCRUDTest.atualizarProjeto -- Time elapsed: 0.005 s <<< ERROR!
+tests.ProjetoCRUDTest.atualizarProjeto -- Time elapsed: 0.006 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
@@ -45,7 +45,7 @@ jakarta.persistence.NoResultException: getSingleResult() did not retrieve any en
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-tests.ProjetoCRUDTest.consultarProjetoComRelacionamentos -- Time elapsed: 0.005 s <<< ERROR!
+tests.ProjetoCRUDTest.consultarProjetoComRelacionamentos -- Time elapsed: 0.006 s <<< ERROR!
 jakarta.persistence.NoResultException: getSingleResult() did not retrieve any entities.
 	at org.eclipse.persistence.internal.jpa.QueryImpl.throwNoResultException(QueryImpl.java:980)
 	at org.eclipse.persistence.internal.jpa.QueryImpl.getSingleResult(QueryImpl.java:536)
