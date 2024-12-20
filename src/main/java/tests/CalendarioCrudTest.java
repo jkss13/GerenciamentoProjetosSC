@@ -7,6 +7,9 @@ package tests;
 import entities.Calendario;
 import jakarta.persistence.TypedQuery;
 import java.text.SimpleDateFormat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 /**
  *

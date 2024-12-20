@@ -4,6 +4,17 @@
  */
 package tests;
 
+import jakarta.persistence.TypedQuery;
+import org.junit.jupiter.api.Test;
+import entities.Cliente;
+import entities.Calendario;
+import entities.Relatorio;
+import entities.Projeto;
+import entities.Recurso;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  *
  * @author janei
@@ -19,7 +30,7 @@ public class ProjetoCRUDTest extends GenericTest {
         assertNotNull(cliente);
 
         Calendario calendario = new Calendario();
-        calendario.setDescricao("Calendário do Projeto A");
+        //calendario.setDescricao("Calendário do Projeto A");
 
         Relatorio relatorio = new Relatorio();
         relatorio.setConteudo("Relatório inicial do Projeto A");

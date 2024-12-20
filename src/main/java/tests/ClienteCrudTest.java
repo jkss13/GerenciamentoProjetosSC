@@ -3,16 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package tests;
+
 import entities.Cliente;
 import entities.Projeto;
 import jakarta.persistence.TypedQuery;
 import java.util.HashSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import static tests.GenericTest.logger;
 
 /**
  *
  * @author julia
  */
-public class ClienteCrudTest {
+public class ClienteCrudTest extends GenericTest {
     
       @Test
     public void persistirCliente() {

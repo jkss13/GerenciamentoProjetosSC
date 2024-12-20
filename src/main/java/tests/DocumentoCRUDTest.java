@@ -4,6 +4,12 @@
  */
 package tests;
 
+import org.junit.jupiter.api.Test;
+import entities.Documento;
+import jakarta.persistence.TypedQuery;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  *
  * @author janei
@@ -28,7 +34,7 @@ public class DocumentoCRUDTest extends GenericTest {
         query.setParameter("titulo", "REQUISITOS");
         Documento documento = query.getSingleResult();
         assertNotNull(documento);
-        documento.setNome("DOCUMENTO TECNICO");
+        documento.setTitulo("DOCUMENTO TECNICO");
         em.flush();
         assertEquals(0, query.getResultList().size());
         query.setParameter("titulo", "CONTRATO");
