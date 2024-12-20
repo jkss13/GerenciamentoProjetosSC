@@ -28,6 +28,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -44,9 +46,13 @@ public class Projeto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "{projeto.nome.notblank}")
+    @Size(max = 255, message = "{projeto.nome.size}")
     @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
     private String nome;
     
+    @NotBlank(message = "{projeto.descricao.notblank}")
+    @Size(max = 255, message = "{projeto.descricao.size}")
     @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
     

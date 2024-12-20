@@ -36,24 +36,33 @@ public class Documento {
     private Long id;
     
     @Column(name = "TITULO_DOCUMENTO", nullable = false, length = 255)
+    @NotNull(message = "{documento.titulo.notnull}")
+    @Size(min = 3, max = 255, message = "{documento.titulo.size}")
     private String titulo;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_DOCUMENTO", nullable = false, length = 50)
+    @NotNull(message = "{documento.tipo.notnull}")
     private TipoDocumento tipo;
-    
+
     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_CRIACAO_DOCUMENTO", nullable = false)
+    @NotNull(message = "{documento.dataCriacao.notnull}")
     private Date dataCriacao;
-    
+
     @Column(name = "AUTOR_DOCUMENTO", nullable = false, length = 50)
+    @NotNull(message = "{documento.autor.notnull}")
+    @Size(min = 3, max = 50, message = "{documento.autor.size}")
     private String autor;
-    
+
     @Column(name = "CAMINHO_ARQUIVO_DOCUMENTO", nullable = false, length = 255)
+    @NotNull(message = "{documento.caminhoArquivo.notnull}")
+    @Size(min = 3, max = 255, message = "{documento.caminhoArquivo.size}")
     private String caminhoArquivo;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ID_PROJETO", nullable = false)
+    @NotNull(message = "{documento.projeto.notnull}")
     private Projeto projeto;
 
     public long getId() {

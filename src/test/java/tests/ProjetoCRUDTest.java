@@ -1,169 +1,92 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-package com.projects.gerenciamentoprojetos;
+package tests;
 
 import entities.Calendario;
 import entities.Cliente;
 import entities.Departamento;
 import entities.Documento;
-import entities.Feriado;
 import entities.Fornecedor;
 import entities.Projeto;
 import entities.Recurso;
 import entities.Relatorio;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 import utils.TipoDocumento;
-import utils.TipoFeriado;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author janei
  */
-
-public class GerenciamentoProjetosSCMain {
-    
-    
+public class ProjetoCRUDTest extends GenericTest {
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("carga_trabalho");
-    
-//    private static final Logger logger = Logger.getGlobal();
-//    
-//    static {
-//        logger.setLevel(Level.INFO);
-//    }
-    
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void persistirProjeto() {
+        logger.info("Executando persistirProjeto()");
+       
+        Projeto projeto = criarProjeto();
         
-//        try {
-//            Long id = persistirProjeto();
-//        } finally {
-//            emf.close();
-//        }
-        
-        
-        persistirProjeto();
-        //persistirDocumentos();
-        persistirDepartamentos();
-        persistirFornecedores();
-        //persistirCliente();
-        //persistirRecursos();
-        //persistirCalendario();
-        //persistirRelatorio();
-//        persistirFeriado();
-        
-        consultarProjeto(1L);
-        //consultarDocumento(1L);
-        //consultarFeriado(1L);
-    }
-    
-    private static void consultarProjeto(long id) {
-        EntityManager em = emf.createEntityManager();
+        // Persistindo o Projeto
+        em.persist(projeto);
+        em.flush();
 
-        Projeto projeto = em.find(Projeto.class, 1);
+        // Verificando se o ID foi gerado
+        assertNotNull(projeto.getId());
+        assertNotNull(projeto.getCalendario().getId());
+        assertNotNull(projeto.getRelatorio().getId());
+    }
 
-        if (projeto != null) {
-            System.out.println(projeto.getNome());
-            System.out.println(projeto.getDescricao());
-            System.out.println(projeto.getDepartamentos());
-            System.out.println(projeto.getFornecedores());
-            System.out.println(projeto.getCliente());
-            System.out.println(projeto.getDocumentos().iterator().next().getTitulo());
-            System.out.println(projeto.getRecursos());
-            System.out.println(projeto.getCalendario());
-            System.out.println(projeto.getRelatorio());
-            // Supondo que documentos estejam associados corretamente
-            //if (!projeto.getDocumentos().isEmpty()) {
-            //    System.out.println(projeto.getDocumentos().iterator().next().getTitulo());
-            //}
-            
-        }
+    @Test
+    public void atualizarProjeto() {
+        logger.info("Executando atualizarProjeto()");
 
-        em.close();
-    }  
-    
-    private static void persistirProjeto() throws IOException {
-        Projeto projeto = new Projeto();
-        preencherProjeto(projeto);
-        EntityManager em = null;
-        EntityTransaction et = null;
+        String novoNome = "Projeto Ratata";
+        String novaDescricao = "Projeto PipipiPopopo";
+        Long id = 1L;
         
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.persist(projeto);
-            et.commit();
-        } catch (Exception ex) {
-            if (et != null && et.isActive())
-                et.rollback();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+        Projeto projeto = em.find(Projeto.class, id);
+        projeto.setNome(novoNome);
+        projeto.setDescricao(novaDescricao);
         
-        //return projeto.getId();
+        em.flush();
+        
+        String jpql = "SELECT p FROM Projeto p WHERE p.id = ?1";]
+        TypedQuery<Projeto> query = em.createQuery(jpql, Projeto.class);
+        query.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+        query.setParameter(1, id);
+        projeto = query.getSingleResult();
+        
+        assertEquals(novoNome, projeto.getNome());
+        assertNotNull(novaDescricao, projeto.getDescricao());
     }
-    
-    private static void persistirDepartamentos() throws IOException {
-        Projeto projeto = new Projeto();
-        List<Departamento> departamentos = new ArrayList<>();
-        preencherDepartamentos(projeto);
-        EntityManager em = null;
-        EntityTransaction et = null;
+
+    @Test
+    public void removerProjeto() {
+        logger.info("Executando removerProjeto()");
         
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.persist(departamentos);
-            et.commit();
-        } catch (Exception ex) {
-            if (et != null && et.isActive())
-                et.rollback();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-    
-    private static void persistirFornecedores() throws IOException {
-        Projeto projeto = new Projeto();
-        List<Fornecedor> fornecedores = new ArrayList<>();
-        preencherFornecedores(projeto);
-        EntityManager em = null;
-        EntityTransaction et = null;
+        Projeto projeto = em.find(Projeto.class, 9L);
+        em.remove(projeto);
         
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.persist(fornecedores);
-            et.commit();
-        } catch (Exception ex) {
-            if (et != null && et.isActive())
-                et.rollback();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
     }
-    
-    private static void preencherProjeto(Projeto projeto) throws IOException {
+
+    private Projeto criarProjeto() {
+        Projeto projeto = new Projeto();
         projeto.setNome("PORTAL DE NEGÓCIOS");
         projeto.setDescricao("Desenvolvimento de Portal de Negócios utilizando Java com JPA e persistência em BD Derby");
+        
+//        Calendar c = Calendar.getInstance();
+//        c.set(Calendar.YEAR, 1981);
+//        c.set(Calendar.MONTH, Calendar.FEBRUARY);
+//        c.set(Calendar.DAY_OF_MONTH, 25);
+        
         
         preencherDepartamentos(projeto);
         preencherFornecedores(projeto);
@@ -172,7 +95,11 @@ public class GerenciamentoProjetosSCMain {
         preencherRecursos(projeto);
         preencherCalendario(projeto);
         preencherRelatorio(projeto);
+
+        return projeto;
     }
+    
+    // preenchendo projeto com classes relacionadas
     
     private static void preencherDepartamentos(Projeto projeto) throws IOException {
         Departamento departamento1 = new Departamento();
@@ -265,5 +192,4 @@ public class GerenciamentoProjetosSCMain {
         relatorio.setTitulo("RELATORIO DE ANALISE");
         projeto.setRelatorio(relatorio);
     }
-    
 }

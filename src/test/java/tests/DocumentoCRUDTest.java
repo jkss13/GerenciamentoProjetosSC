@@ -18,6 +18,7 @@ public class DocumentoCRUDTest extends GenericTest {
         //documento.setMae(tituloDocumento);
         em.persist(documento);
         em.flush();
+        
         assertNotNull(documento.getId());
     }
 

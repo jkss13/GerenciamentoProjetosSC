@@ -32,13 +32,20 @@ public class Feriado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Temporal(TemporalType.DATE)
+     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_FERIADO", nullable = false, unique = true)
+    @NotNull(message = "{feriado.data.notnull}")
     private Date data;
+
     @Column(name = "NOME_FERIADO", nullable = false, length = 50, unique = true)
+    @NotNull(message = "{feriado.nome.notnull}")
+    @Size(min = 3, max = 50, message = "{feriado.nome.size}")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "{feriado.nome.pattern}")
     private String nome;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_FERIADO", nullable = false, length = 20)
+    @NotNull(message = "{feriado.tipo.notnull}")
     private TipoFeriado tipo;
 
     public long getId() {
