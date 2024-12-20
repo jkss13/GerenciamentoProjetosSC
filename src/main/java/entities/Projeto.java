@@ -25,6 +25,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -33,12 +34,12 @@ import java.util.List;
  *
  * @author janei
  */
-
 @Entity
 @Table(name = "TB_PROJETO")
 @DiscriminatorValue(value = "P")
 //@PrimaryKeyJoinColumn(name = "", referencedColumnName = "")
 public class Projeto implements Serializable {
+
     @Id
     @Column(name = "ID_PROJETO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,31 +47,31 @@ public class Projeto implements Serializable {
 
     @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
     private String nome;
-    
+
     @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
-    
+
     // MANY TO MANY
     @ManyToMany(mappedBy = "projetos", fetch = FetchType.LAZY)
     private List<Departamento> departamentos;
-    
-    @ManyToMany(fetch = FetchType.LAZY) 
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "TB_PROJETO_FORNECEDOR", 
-        joinColumns = @JoinColumn(name = "ID_PROJETO"),
-        inverseJoinColumns = @JoinColumn(name = "ID_FORNECEDOR")
+            name = "TB_PROJETO_FORNECEDOR",
+            joinColumns = @JoinColumn(name = "ID_PROJETO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_FORNECEDOR")
     )
     private List<Fornecedor> fornecedores;
-    
+
     // MANY TO ONE
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ID_CLIENTE", nullable = false) // Chave estrangeira 
+    @JoinColumn(name = "ID_CLIENTE", nullable = true) // Chave estrangeira 
     private Cliente cliente;
-    
+
     // ONE TO MANY
     @OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Documento> documentos;
-    
+
     @OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recurso> recursos;
 
@@ -78,13 +79,21 @@ public class Projeto implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "ID_CALENDARIO", nullable = true)
     private Calendario calendario;
-    
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "ID_RELATORIO", nullable = true)
     private Relatorio relatorio;
 
-    public Projeto() {}
-    
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tarefa> tarefas;
+
+    public List<Tarefa> getTarefas() {
+        return tarefas;
+    }
+
+    public Projeto() {
+    }
+
     public long getId() {
         return id;
     }
@@ -110,7 +119,6 @@ public class Projeto implements Serializable {
     }
 
     // Getters e Setters para Relacionamentos
-
     // ManyToMany Departamento
     public List<Departamento> getDepartamentos() {
         return departamentos;
@@ -170,7 +178,7 @@ public class Projeto implements Serializable {
             recurso.setProjeto(this); // Define o Projeto no Recurso
         }
     }
-    
+
     // Método para adicionar um recurso ao projeto
     public void addRecurso(Recurso recurso) {
         if (!this.recursos.contains(recurso)) {
@@ -191,7 +199,8 @@ public class Projeto implements Serializable {
     public Calendario getCalendario() {
         return calendario;
     }
- public void setCalendario(Calendario calendario) {
+
+    public void setCalendario(Calendario calendario) {
         this.calendario = calendario;
         // Evita loop ao configurar o relacionamento bidirecional
         if (calendario != null && calendario.getProjeto() != this) {
@@ -204,11 +213,35 @@ public class Projeto implements Serializable {
         return relatorio;
     }
 
-  public void setRelatorio(Relatorio relatorio) {
+    public void setRelatorio(Relatorio relatorio) {
         this.relatorio = relatorio;
         // Evita loop ao configurar o relacionamento bidirecional
         if (relatorio != null && relatorio.getProjeto() != this) {
             relatorio.setProjeto(this);
+        }
+    }
+
+    public void setTarefas(List<Tarefa> tarefas) {
+        this.tarefas = tarefas;
+        for (Tarefa tarefa : tarefas) {
+            tarefa.setProjeto(this); // Configurar a relação bidirecional
+        }
+    }
+
+// Método auxiliar para adicionar uma tarefa
+    public void addTarefa(Tarefa tarefa) {
+        if (this.tarefas == null) {
+            this.tarefas = new ArrayList<>();
+        }
+        this.tarefas.add(tarefa);
+        tarefa.setProjeto(this);
+    }
+
+// Método auxiliar para remover uma tarefa
+    public void removeTarefa(Tarefa tarefa) {
+        if (this.tarefas != null && this.tarefas.contains(tarefa)) {
+            this.tarefas.remove(tarefa);
+            tarefa.setProjeto(null);
         }
     }
 
@@ -225,9 +258,9 @@ public class Projeto implements Serializable {
             return false;
         }
         Projeto other = (Projeto) object;
-        
-        return !((this.id == null && other.id != null) || 
-                (this.id != null && !this.id.equals(other.id)));
+
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

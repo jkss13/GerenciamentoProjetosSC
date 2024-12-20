@@ -4,4 +4,5 @@ tests\GenericTest.class
 tests\ProjetoCRUDTest.class
 tests\ClienteCrudTest.class
 tests\CalendarioCrudTest.class
+tests\TarefaCRUDTest.class
 tests\RelatorioCRUDTest.class

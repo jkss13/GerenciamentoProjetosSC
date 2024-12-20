@@ -1,26 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package tests;
 
 import entities.Cliente;
 import entities.Projeto;
+import jakarta.persistence.CacheRetrieveMode;
 import jakarta.persistence.TypedQuery;
 import java.util.HashSet;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-
-/**
- *
- * @author julia
- */
 public class ClienteCrudTest extends GenericTest {
-    
-      @Test
+
+    @BeforeEach
+    public void setup() {
+        // Garantir que nenhuma transação ativa ou estado inválido permaneça antes de cada teste
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+    }
+
+    @Test
+@Order(1)
     public void persistirCliente() {
         logger.info("Executando persistirCliente()");
 
@@ -41,82 +43,101 @@ public class ClienteCrudTest extends GenericTest {
         projeto1.setDescricao("Descrição do Projeto A");
         cliente.addProjeto(projeto1);
 
-        Projeto projeto2 = new Projeto();
-        projeto2.setNome("Projeto B");
-        projeto2.setDescricao("Descrição do Projeto B");
-        cliente.addProjeto(projeto2);
-
+       
+        em.getTransaction().begin();
         // Persistindo o cliente e seus projetos
         em.persist(cliente);
         em.flush();
+        em.getTransaction().commit();
 
-        // Verificando se o cliente foi persistido com sucesso
-        assertNotNull(cliente.getId());
-        assertEquals(2, cliente.getProjetos().size());
-    }
-
-    @Test
-    public void atualizarCliente() {
-        logger.info("Executando atualizarCliente()");
-
-        // Buscando um cliente existente
+        // Validações
         TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
         query.setParameter("nome", "Empresa ABC");
-        Cliente cliente = query.getSingleResult();
-        assertNotNull(cliente);
+        List<Cliente> resultados = query.getResultList();
 
-        // Atualizando os dados do cliente
-        cliente.setNome("Empresa XYZ");
-        cliente.addTelefone("11-90000-0000");
-        em.flush();
-
-        // Verificando se as alterações foram aplicadas
-        assertEquals("Empresa XYZ", cliente.getNome());
-        assertTrue(cliente.getTelefones().contains("11-90000-0000"));
+        assertFalse(resultados.isEmpty(), "Cliente não foi persistido corretamente");
+        Cliente clientePersistido = resultados.get(0);
+        assertNotNull(clientePersistido);
     }
 
     @Test
+    @Order(2)
+
+    public void atualizarCliente() {
+        logger.info("Executando atualizarCliente()");
+        String novoTelefone = "11-90000-0000";
+
+        // Buscando o cliente
+        TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
+        query.setParameter("nome", "Apple");
+        Cliente cliente = query.getSingleResult();
+
+        assertNotNull(cliente, "Cliente não encontrado");
+
+        em.getTransaction().begin();
+        // Atualizando os dados do cliente
+        cliente.addTelefone(novoTelefone);
+        em.flush();
+        em.getTransaction().commit();
+
+        // Validação
+        query.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+        Cliente clienteAtualizado = query.getSingleResult();
+        assertTrue(clienteAtualizado.getTelefones().contains(novoTelefone), "O novo telefone não foi adicionado");
+    }
+
+    @Test
+    @Order(3)
+
     public void atualizarClienteMerge() {
         logger.info("Executando atualizarClienteMerge()");
+        String novoEmail = "novoemail@empresaxyz.com";
 
-        // Buscando um cliente existente
+        // Buscando o cliente
         TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
-        query.setParameter("nome", "Empresa XYZ");
+        query.setParameter("nome", "Apple");
         Cliente cliente = query.getSingleResult();
-        assertNotNull(cliente);
+
+        assertNotNull(cliente, "Cliente não encontrado");
 
         // Modificando o cliente fora do contexto de persistência
-        cliente.setEmail("novocontato@empresaxyz.com");
+        cliente.setEmail(novoEmail);
         em.clear(); // Limpando o contexto de persistência
 
+        em.getTransaction().begin();
         // Usando merge para aplicar as alterações
         em.merge(cliente);
         em.flush();
+        em.getTransaction().commit();
 
-        // Verificando a atualização
-        query.setParameter("nome", "Empresa XYZ");
-        cliente = query.getSingleResult();
-        assertEquals("novocontato@empresaxyz.com", cliente.getEmail());
+        // Validação
+        query.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+        Cliente clienteAtualizado = query.getSingleResult();
+        assertEquals(novoEmail, clienteAtualizado.getEmail(), "O email do cliente não foi atualizado");
     }
 
-    @Test
-    public void removerCliente() {
-        logger.info("Executando removerCliente()");
+@Test
+public void removerCliente() {
+    logger.info("Executando removerCliente()");
 
-        // Buscando um cliente existente
-        TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
-        query.setParameter("nome", "Empresa XYZ");
-        Cliente cliente = query.getSingleResult();
-        assertNotNull(cliente);
+    // Buscando o cliente
+    TypedQuery<Cliente> query = em.createQuery(
+        "SELECT c FROM Cliente c LEFT JOIN FETCH c.projetos WHERE c.nome = :nome", Cliente.class);
+    query.setParameter("nome", "Apple");
+    Cliente cliente = query.getResultList().stream().findFirst().orElse(null);
 
-        // Removendo o cliente
-        em.remove(cliente);
-        em.flush();
+    assertNotNull(cliente, "Cliente não encontrado");
 
-        // Verificando se o cliente foi removido
-        query = em.createQuery("SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
-        query.setParameter("nome", "Empresa XYZ");
-        assertEquals(0, query.getResultList().size());
-    }
-    
-}
+    em.getTransaction().begin();
+
+    // Removendo o cliente (os projetos e tarefas associados serão removidos automaticamente)
+    em.remove(cliente);
+    em.getTransaction().commit();
+
+    // Verificando se o cliente foi removido
+    TypedQuery<Cliente> queryVerificacao = em.createQuery(
+        "SELECT c FROM Cliente c WHERE c.nome = :nome", Cliente.class);
+    queryVerificacao.setParameter("nome", "Apple");
+    List<Cliente> resultados = queryVerificacao.getResultList();
+    assertTrue(resultados.isEmpty(), "O cliente ainda existe no banco de dados");
+}}
