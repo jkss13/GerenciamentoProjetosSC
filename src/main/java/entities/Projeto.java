@@ -80,7 +80,7 @@ public class Projeto implements Serializable {
     private Calendario calendario;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "ID_RELATORIO", nullable = false)
+    @JoinColumn(name = "ID_RELATORIO", nullable = true)
     private Relatorio relatorio;
 
     public Projeto() {}
