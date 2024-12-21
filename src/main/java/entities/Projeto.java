@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entities;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,24 +14,15 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
-/**
- *
- * @author janei
- */
 @Entity
 @Table(name = "TB_PROJETO")
 @DiscriminatorValue(value = "P")
-//@PrimaryKeyJoinColumn(name = "", referencedColumnName = "")
 public class Projeto implements Serializable {
 
     @Id
@@ -45,56 +30,49 @@ public class Projeto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "{projeto.nome.notblank}")
+    @Size(max = 255, message = "{projeto.nome.size}")
     @Column(name = "NOME_PROJETO", nullable = false, length = 255, unique = true)
     private String nome;
 
+    @NotBlank(message = "{projeto.descricao.notblank}")
+    @Size(max = 255, message = "{projeto.descricao.size}")
     @Column(name = "DESCRICAO_PROJETO", nullable = false, length = 255)
     private String descricao;
 
-    // MANY TO MANY
     @ManyToMany(mappedBy = "projetos", fetch = FetchType.LAZY)
     private List<Departamento> departamentos;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "TB_PROJETO_FORNECEDOR",
-            joinColumns = @JoinColumn(name = "ID_PROJETO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_FORNECEDOR")
+        name = "TB_PROJETO_FORNECEDOR",
+        joinColumns = @JoinColumn(name = "ID_PROJETO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_FORNECEDOR")
     )
     private List<Fornecedor> fornecedores;
 
-    // MANY TO ONE
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ID_CLIENTE", nullable = true) // Chave estrangeira 
+    @JoinColumn(name = "ID_CLIENTE", nullable = false)
     private Cliente cliente;
 
-    // ONE TO MANY
     @OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Documento> documentos;
 
     @OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recurso> recursos;
 
-    // ONE TO ONE
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "ID_CALENDARIO", nullable = true)
+    @JoinColumn(name = "ID_CALENDARIO", nullable = false)
     private Calendario calendario;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "ID_RELATORIO", nullable = true)
+    @JoinColumn(name = "ID_RELATORIO", nullable = false)
     private Relatorio relatorio;
-
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Tarefa> tarefas;
-
-    public List<Tarefa> getTarefas() {
-        return tarefas;
-    }
 
     public Projeto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -118,8 +96,6 @@ public class Projeto implements Serializable {
         this.descricao = descricao;
     }
 
-    // Getters e Setters para Relacionamentos
-    // ManyToMany Departamento
     public List<Departamento> getDepartamentos() {
         return departamentos;
     }
@@ -127,11 +103,10 @@ public class Projeto implements Serializable {
     public void setDepartamentos(List<Departamento> departamentos) {
         this.departamentos = departamentos;
         for (Departamento departamento : departamentos) {
-            departamento.getProjetos().add(this); // Adiciona o Projeto na lista de Projetos do Departamento
+            departamento.getProjetos().add(this);
         }
     }
 
-    // ManyToMany Fornecedor
     public List<Fornecedor> getFornecedores() {
         return fornecedores;
     }
@@ -139,11 +114,10 @@ public class Projeto implements Serializable {
     public void setFornecedores(List<Fornecedor> fornecedores) {
         this.fornecedores = fornecedores;
         for (Fornecedor fornecedor : fornecedores) {
-            fornecedor.getProjetos().add(this); // Adiciona o Projeto na lista de Projetos do Fornecedor
+            fornecedor.getProjetos().add(this);
         }
     }
 
-    // ManyToOne Cliente
     public Cliente getCliente() {
         return cliente;
     }
@@ -151,11 +125,10 @@ public class Projeto implements Serializable {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
         if (!cliente.getProjetos().contains(this)) {
-            cliente.getProjetos().add(this); // Adiciona o Projeto na lista de Projetos do Cliente
+            cliente.getProjetos().add(this);
         }
     }
 
-    // OneToMany Documento
     public List<Documento> getDocumentos() {
         return documentos;
     }
@@ -163,11 +136,10 @@ public class Projeto implements Serializable {
     public void setDocumentos(List<Documento> documentos) {
         this.documentos = documentos;
         for (Documento documento : documentos) {
-            documento.setProjeto(this); // Define o Projeto no Documento
+            documento.setProjeto(this);
         }
     }
 
-    // OneToMany Recurso
     public List<Recurso> getRecursos() {
         return recursos;
     }
@@ -175,74 +147,26 @@ public class Projeto implements Serializable {
     public void setRecursos(List<Recurso> recursos) {
         this.recursos = recursos;
         for (Recurso recurso : recursos) {
-            recurso.setProjeto(this); // Define o Projeto no Recurso
+            recurso.setProjeto(this);
         }
     }
 
-    // Método para adicionar um recurso ao projeto
-    public void addRecurso(Recurso recurso) {
-        if (!this.recursos.contains(recurso)) {
-            this.recursos.add(recurso);
-            recurso.setProjeto(this);  // Garantir a associação bidirecional
-        }
-    }
-
-    // Método para remover um recurso do projeto
-    public void removeRecurso(Recurso recurso) {
-        if (this.recursos.contains(recurso)) {
-            this.recursos.remove(recurso);
-            recurso.setProjeto(null);  // Desassociar o recurso do projeto
-        }
-    }
-
-    // OneToOne Calendario
     public Calendario getCalendario() {
         return calendario;
     }
 
     public void setCalendario(Calendario calendario) {
         this.calendario = calendario;
-        // Evita loop ao configurar o relacionamento bidirecional
-        if (calendario != null && calendario.getProjeto() != this) {
-            calendario.setProjeto(this);
-        }
+        calendario.setProjeto(this);
     }
 
-    // OneToOne Relatorio
     public Relatorio getRelatorio() {
         return relatorio;
     }
 
     public void setRelatorio(Relatorio relatorio) {
         this.relatorio = relatorio;
-        // Evita loop ao configurar o relacionamento bidirecional
-        if (relatorio != null && relatorio.getProjeto() != this) {
-            relatorio.setProjeto(this);
-        }
-    }
-
-    public void setTarefas(List<Tarefa> tarefas) {
-        this.tarefas = tarefas;
-        for (Tarefa tarefa : tarefas) {
-            tarefa.setProjeto(this); // Configurar a relação bidirecional
-        }
-    }
-
-// Método auxiliar para adicionar uma tarefa
-    public void addTarefa(Tarefa tarefa) {
-        if (this.tarefas == null) {
-            this.tarefas = new ArrayList<>();
-        }
-        this.tarefas.add(tarefa);
-        tarefa.setProjeto(this);
-    }
-
-// Método auxiliar para remover uma tarefa
-    public void removeTarefa(Tarefa tarefa) {
-        if (this.tarefas != null && this.tarefas.contains(tarefa)) {
-            this.tarefas.remove(tarefa);
-            tarefa.setProjeto(null);
-        }
+        relatorio.setProjeto(this);
     }
 
     @Override
@@ -258,14 +182,11 @@ public class Projeto implements Serializable {
             return false;
         }
         Projeto other = (Projeto) object;
-
-        return !((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id)));
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override
     public String toString() {
-        return "exemplo.jpa.Projeto[ id=" + id + " ]";
+        return "Projeto[ id=" + id  + " ]";
     }
-
 }
